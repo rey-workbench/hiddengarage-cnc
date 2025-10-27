@@ -8,6 +8,8 @@ export class PathRenderer {
   private segments: GCodeSegment[] = [];
   private pathGroup: THREE.Group;
   private colorMode: ColorMode = ColorMode.Default;
+  private currentSegmentIndex: number = 0;
+  private colorAttribute: THREE.BufferAttribute | null = null;
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
@@ -47,7 +49,13 @@ export class PathRenderer {
     }
 
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    const colorAttr = new THREE.Float32BufferAttribute(colors, 3);
+    geometry.setAttribute('color', colorAttr);
+    
+    // Store color attribute reference for Progressive mode updates
+    if (this.colorMode === ColorMode.Progressive) {
+      this.colorAttribute = colorAttr;
+    }
 
     const material = new THREE.LineBasicMaterial({
       vertexColors: true,
@@ -105,25 +113,74 @@ export class PathRenderer {
   }
 
   private getProgressiveColor(segment: GCodeSegment, index: number): THREE.Color {
-    if (segment.type === SegmentType.Rapid) {
-      return new THREE.Color(CNCConstants.colors.rapid);
+    // In Progressive mode: all lines start white
+    // Colors change dynamically via updateProgressiveTrailing() after toolhead passes
+    return new THREE.Color(0xffffff);
+  }
+
+  updateProgressiveTrailing(currentSegmentIndex: number): void {
+    if (this.colorMode !== ColorMode.Progressive || !this.colorAttribute) {
+      return;
     }
 
-    const progress = index / this.segments.length;
-    
-    const dx = Math.abs(segment.to[0] - segment.from[0]);
-    const dy = Math.abs(segment.to[1] - segment.from[1]);
+    this.currentSegmentIndex = currentSegmentIndex;
 
-    const baseColor = new THREE.Color(CNCConstants.colors.progressiveStart);
+    // Update colors for segments that have been visited by toolhead
+    const colors = this.colorAttribute.array as Float32Array;
     
-    let targetColor: THREE.Color;
-    if (dx > dy) {
-      targetColor = new THREE.Color(CNCConstants.colors.progressiveX);
-    } else {
-      targetColor = new THREE.Color(CNCConstants.colors.progressiveY);
+    for (let i = 0; i < this.segments.length; i++) {
+      const segment = this.segments[i];
+      let color: THREE.Color;
+      
+      if (i < currentSegmentIndex) {
+        // Visited segments: color based on movement type (permanent)
+        if (segment.type === SegmentType.ArcCW || segment.type === SegmentType.ArcCCW) {
+          color = new THREE.Color(CNCConstants.colors.arcCut); // Green for arcs
+        } else if (segment.type === SegmentType.Linear || segment.type === SegmentType.Rapid) {
+          color = new THREE.Color(CNCConstants.colors.linearCut); // Red for straight
+        } else {
+          color = new THREE.Color(0xffffff); // White for others
+        }
+      } else {
+        // Not yet visited: white
+        color = new THREE.Color(0xffffff);
+      }
+
+      // Each segment has 2 vertices (from, to)
+      const colorIndex = i * 6; // 2 vertices * 3 components (RGB)
+      colors[colorIndex] = color.r;
+      colors[colorIndex + 1] = color.g;
+      colors[colorIndex + 2] = color.b;
+      colors[colorIndex + 3] = color.r;
+      colors[colorIndex + 4] = color.g;
+      colors[colorIndex + 5] = color.b;
     }
 
-    return baseColor.lerp(targetColor, progress);
+    this.colorAttribute.needsUpdate = true;
+  }
+
+  resetProgressiveTrailing(): void {
+    if (this.colorMode !== ColorMode.Progressive || !this.colorAttribute) {
+      return;
+    }
+
+    this.currentSegmentIndex = 0;
+
+    // Reset all segments back to white
+    const colors = this.colorAttribute.array as Float32Array;
+    const whiteColor = new THREE.Color(0xffffff);
+    
+    for (let i = 0; i < this.segments.length; i++) {
+      const colorIndex = i * 6;
+      colors[colorIndex] = whiteColor.r;
+      colors[colorIndex + 1] = whiteColor.g;
+      colors[colorIndex + 2] = whiteColor.b;
+      colors[colorIndex + 3] = whiteColor.r;
+      colors[colorIndex + 4] = whiteColor.g;
+      colors[colorIndex + 5] = whiteColor.b;
+    }
+
+    this.colorAttribute.needsUpdate = true;
   }
 
   clearPaths(): void {
@@ -140,6 +197,8 @@ export class PathRenderer {
         }
       }
     }
+    
+    this.colorAttribute = null;
   }
 
   private rebuild(): void {

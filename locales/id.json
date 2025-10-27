@@ -1,4 +1,9 @@
 {
+  "common": {
+    "cancel": "Batal",
+    "confirm": "Konfirmasi",
+    "reset": "Reset"
+  },
   "tab": {
     "gcode": "G-Code",
     "image": "Gambar → G-Code",
@@ -95,7 +100,7 @@
     "colorDefault": "Default (tipe gerakan)",
     "colorAxis": "Axis (arah gerakan)",
     "colorProgressive": "Progressive (realtime)",
-    "progressiveModeDesc": "Mode Progressive: Garis mulai putih dan berubah warna berdasarkan arah gerakan",
+    "progressiveModeDesc": "Mode Progressive: Semua garis awalnya putih, setelah dilewati toolhead berubah menjadi merah (straight G0/G1) atau hijau (arc G2/G3)",
     "displayOptions": "Opsi Tampilan",
     "showGrid": "Tampilkan Grid",
     "showAxes": "Tampilkan Sumbu",
@@ -137,7 +142,9 @@
     "linearCut": "Potong Linear (G01) - Merah",
     "arcCut": "Potong Arc (G02/G03) - Hijau",
     "progressiveMode": "Mode Progressive",
-    "progressiveDesc": "Warna berdasarkan arah gerakan",
+    "progressiveDesc": "Garis putih berubah warna setelah dilewati toolhead",
+    "progressiveTrailingStraight": "Setelah dilewati: Straight (G0/G1) - Merah",
+    "progressiveTrailingArc": "Setelah dilewati: Arc (G2/G3) - Hijau",
     "xAxis": "Sumbu-X (horizontal) - Merah",
     "yAxis": "Sumbu-Y (vertikal) - Hijau"
   },

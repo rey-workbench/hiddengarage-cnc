@@ -92,7 +92,7 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
 
   return (
     <LocaleContext.Provider value={{ locale, messages, isLoading, loadLocale }}>
-      <NextIntlClientProvider locale={locale} messages={messages}>
+      <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Jakarta">
         {children}
       </NextIntlClientProvider>
     </LocaleContext.Provider>

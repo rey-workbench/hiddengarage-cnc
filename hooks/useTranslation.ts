@@ -22,6 +22,7 @@ export function useTranslation() {
     t: (key: string) => t(key),
     
     // Shorthand methods - lebih pendek dan readable
+    common: (key: string) => t(`common.${key}`),
     tab: (key: string) => t(`tab.${key}`),
     gcode: (key: string) => t(`gcode.${key}`),
     image: (key: string) => t(`image.${key}`),

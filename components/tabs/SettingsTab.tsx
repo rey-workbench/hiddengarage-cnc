@@ -5,6 +5,8 @@ import { useUI } from '@/contexts/UiContext';
 import { useSceneControls } from '@/hooks/useThreeScene';
 import { ColorMode, CameraView } from '@/lib/Constants';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useConfirmDialog } from '@/hooks/useConfirmDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 interface SettingsTabProps {
   sceneManager: any;
@@ -14,7 +16,8 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
   const { settings, updateSettings } = useSettings();
   const { resetPanelPositions } = useUI();
   const { setCameraView, toggleGrid, toggleAxes } = useSceneControls(sceneManager);
-  const { settings: settingsTranslations } = useTranslation();
+  const { common, settings: settingsTranslations } = useTranslation();
+  const { dialogState, showConfirm, handleCancel, handleConfirm } = useConfirmDialog();
 
   return (
     <div className="space-y-4">
@@ -90,8 +93,15 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
       <div>
         <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">{settingsTranslations('panelLayout')}</h3>
         <button 
-          onClick={() => {
-            if (confirm(settingsTranslations('resetPanelPositionsConfirm'))) {
+          onClick={async () => {
+            const confirmed = await showConfirm({
+              title: settingsTranslations('resetPanelPositions'),
+              message: settingsTranslations('resetPanelPositionsConfirm'),
+              confirmText: common('reset'),
+              cancelText: common('cancel'),
+              icon: 'warning',
+            });
+            if (confirmed) {
               resetPanelPositions();
             }
           }}
@@ -101,6 +111,18 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
           <span className="text-xs">{settingsTranslations('resetPanelPositions')}</span>
         </button>
       </div>
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={dialogState.isOpen}
+        title={dialogState.title}
+        message={dialogState.message}
+        confirmText={dialogState.confirmText}
+        cancelText={dialogState.cancelText}
+        icon={dialogState.icon}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </div>
   );
 }

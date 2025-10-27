@@ -8,6 +8,7 @@ export class PlaybackController {
   private isPlaying: boolean = false;
   private speed: number = 1;
   private toolhead: Toolhead;
+  private pathRenderer: PathRenderer;
   private lastUpdateTime: number = 0;
   private segmentProgress: number = 0;
 
@@ -17,6 +18,7 @@ export class PlaybackController {
 
   constructor(toolhead: Toolhead, pathRenderer: PathRenderer) {
     this.toolhead = toolhead;
+    this.pathRenderer = pathRenderer;
   }
 
   setSegments(segments: GCodeSegment[]): void {
@@ -55,6 +57,9 @@ export class PlaybackController {
       this.toolhead.setPositionXYZ(0, 0, 0);
       this.emitPositionUpdate([0, 0, 0], 0);
     }
+    
+    // Reset progressive trailing colors
+    this.pathRenderer.resetProgressiveTrailing();
     
     this.emitStateChange();
   }
@@ -103,6 +108,9 @@ export class PlaybackController {
       
       this.currentSegmentIndex++;
       this.segmentProgress = 0;
+      
+      // Update progressive trailing colors when segment changes
+      this.pathRenderer.updateProgressiveTrailing(this.currentSegmentIndex);
       
       if (this.currentSegmentIndex >= this.segments.length) {
         this.isPlaying = false;

@@ -1,4 +1,9 @@
 {
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "reset": "Reset"
+  },
   "tab": {
     "gcode": "G-Code",
     "image": "Image → G-Code",
@@ -96,7 +101,7 @@
     "colorDefault": "Default (movement type)",
     "colorAxis": "Axis (movement direction)",
     "colorProgressive": "Progressive (realtime)",
-    "progressiveModeDesc": "Progressive Mode: Lines start white and change color based on movement direction",
+    "progressiveModeDesc": "Progressive Mode: All lines start white, turn red (straight G0/G1) or green (arc G2/G3) after toolhead passes",
     "displayOptions": "Display Options",
     "showGrid": "Show Grid",
     "showAxes": "Show Axes",
@@ -136,7 +141,9 @@
     "linearCut": "Linear Cut (G01) - Red",
     "arcCut": "Arc Cut (G02/G03) - Green",
     "progressiveMode": "Progressive Mode",
-    "progressiveDesc": "Color based on movement direction",
+    "progressiveDesc": "White lines change color after toolhead passes",
+    "progressiveTrailingStraight": "After visited: Straight (G0/G1) - Red",
+    "progressiveTrailingArc": "After visited: Arc (G2/G3) - Green",
     "xAxis": "X-Axis (horizontal) - Red",
     "yAxis": "Y-Axis (vertical) - Green"
   },

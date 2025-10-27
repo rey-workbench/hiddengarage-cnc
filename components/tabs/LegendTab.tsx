@@ -29,12 +29,16 @@ export default function LegendTab() {
         <p className="text-xs text-dark-400 mb-3">{legend('progressiveDesc')}</p>
         <div className="space-y-2">
           <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded bg-[#ffffff] shadow border border-dark-600" />
+            <span className="text-sm text-dark-300">Unvisited Lines - White</span>
+          </div>
+          <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-[#ff0000] shadow" />
-            <span className="text-sm text-dark-300">{legend('xAxis')}</span>
+            <span className="text-sm text-dark-300">{legend('progressiveTrailingStraight')}</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-[#00ff00] shadow" />
-            <span className="text-sm text-dark-300">{legend('yAxis')}</span>
+            <span className="text-sm text-dark-300">{legend('progressiveTrailingArc')}</span>
           </div>
         </div>
       </div>
