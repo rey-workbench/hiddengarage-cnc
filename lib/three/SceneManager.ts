@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import type { BoundingBox } from '@/types';
-import { CameraView } from '@/types';
+import type { BoundingBox } from '@/lib/Constants';
+import { CameraView } from '@/lib/Constants';
 import { CNCConstants } from '../Constants';
 import { CustomAxesHelper } from './helpers/AxesHelper';
 import { CustomGridHelper } from './helpers/GridHelper';
@@ -43,7 +43,7 @@ export class SceneManager {
     // Initialize helpers
     this.cameraController = new CameraController(this.camera, this.renderer.domElement);
     this.lightsHelper = new LightsHelper(this.scene);
-    this.gridHelper = new CustomGridHelper(200, 20, CNCConstants.COLORS.GRID);
+    this.gridHelper = new CustomGridHelper(200, 20, CNCConstants.colors.grid);
     this.axesHelper = new CustomAxesHelper(10000);
     
     // Add helpers to scene
@@ -90,7 +90,7 @@ export class SceneManager {
     const divisions = Math.max(10, Math.ceil(gridSize / 10));
     
     this.scene.remove(this.gridHelper.getObject());
-    const newGrid = this.gridHelper.updateSize(gridSize, divisions, CNCConstants.COLORS.GRID);
+    const newGrid = this.gridHelper.updateSize(gridSize, divisions, CNCConstants.colors.grid);
     newGrid.position.set(centerThreeX, centerThreeY - sizeZ / 2, centerThreeZ);
     this.scene.add(newGrid);
 

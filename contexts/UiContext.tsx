@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
-import type { UIState, TabType, PanelState } from '@/types';
+import type { UIState, TabType, PanelState } from '@/lib/Constants';
 
 interface UIContextType {
   uiState: UIState;

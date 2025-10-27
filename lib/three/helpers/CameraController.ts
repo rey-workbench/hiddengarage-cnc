@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import type { BoundingBox } from '@/types';
-import { CameraView } from '@/types';
+import type { BoundingBox } from '@/lib/Constants';
+import { CameraView } from '@/lib/Constants';
 
 export class CameraController {
   private camera: THREE.PerspectiveCamera;
@@ -61,16 +61,16 @@ export class CameraController {
     let newPosition: THREE.Vector3;
 
     switch (view) {
-      case CameraView.TOP:
+      case CameraView.Top:
         newPosition = new THREE.Vector3(target.x, target.y + distance, target.z);
         break;
-      case CameraView.FRONT:
+      case CameraView.Front:
         newPosition = new THREE.Vector3(target.x, target.y, target.z + distance);
         break;
-      case CameraView.SIDE:
+      case CameraView.Side:
         newPosition = new THREE.Vector3(target.x + distance, target.y, target.z);
         break;
-      case CameraView.ISOMETRIC:
+      case CameraView.Isometric:
       default:
         newPosition = new THREE.Vector3(
           target.x + distance * 0.7,

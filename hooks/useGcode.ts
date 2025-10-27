@@ -8,7 +8,7 @@ import { CNCConstants } from '@/lib/Constants';
 import type { PathRenderer } from '@/lib/three/PathRenderer';
 import type { SceneManager } from '@/lib/three/SceneManager';
 import type { Toolhead } from '@/lib/three/Toolhead';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function useGCode(
   pathRenderer: PathRenderer | null,
@@ -19,7 +19,7 @@ export function useGCode(
   const { showSuccess, showWarning, showError, setLoading } = useUI();
   const { settings } = useSettings();
 
-  const t = useTranslations();
+  const { t } = useTranslation();
 
   const handleParseGCode = useCallback(async (gcodeText: string) => {
     if (!pathRenderer || !sceneManager || !toolhead) {
@@ -50,7 +50,7 @@ export function useGCode(
         const objectSize = sceneManager.adjustCameraToFitBBox(result.bbox);
         toolhead.scale(objectSize);
         
-        if (objectSize > CNCConstants.DEFAULTS.TOOLHEAD_AUTO_HIDE_SIZE) {
+        if (objectSize > CNCConstants.defaults.toolheadAutoHideSize) {
           toolhead.setVisible(false);
         } else {
           toolhead.setVisible(settings.showToolhead);
@@ -65,15 +65,15 @@ export function useGCode(
         result.bbox.maxZ - result.bbox.minZ
       );
 
-      if (bboxSize > CNCConstants.DEFAULTS.TOOLHEAD_AUTO_HIDE_SIZE) {
+      if (bboxSize > CNCConstants.defaults.toolheadAutoHideSize) {
         showWarning(
           `${t('msg.objectLarge')} (${(bboxSize / 1000).toFixed(1)}m) ${t('msg.useSmallScale')}`
         );
-      } else if (result.segments.length > CNCConstants.DEFAULTS.VERY_LARGE_FILE_WARNING) {
+      } else if (result.segments.length > CNCConstants.defaults.veryLargeFileWarning) {
         showError(
           `${t('msg.veryLargeFile')} ${result.segments.length} ${t('msg.segments')} ${t('msg.reduceSegments')}`
         );
-      } else if (result.segments.length > CNCConstants.DEFAULTS.LARGE_FILE_WARNING) {
+      } else if (result.segments.length > CNCConstants.defaults.largeFileWarning) {
         showWarning(
           `${t('msg.largeFile')} ${result.segments.length} ${t('msg.segments')} ${t('msg.renderingSlow') as string}`
         );
@@ -117,7 +117,7 @@ export function useGCode(
       if (seg.type === 'rapid') {
         lines.push(`G00 X${to[0].toFixed(3)} Y${to[1].toFixed(3)} Z${to[2].toFixed(3)}`);
       } else {
-        const feed = seg.feed || CNCConstants.DEFAULTS.FEED_RATE;
+        const feed = seg.feed || CNCConstants.defaults.feedRate;
         lines.push(`G01 X${to[0].toFixed(3)} Y${to[1].toFixed(3)} Z${to[2].toFixed(3)} F${feed}`);
       }
     }

@@ -8,7 +8,7 @@ import type {
   ParseResult,
   ToolPosition,
   SimulationState,
-} from '@/types';
+} from '@/lib/Constants';
 import { GCodeParser } from '@/lib/GcodeParser';
 import { SVGConverter } from '@/lib/SvgConverter';
 

@@ -199,8 +199,8 @@
   }
 
   .ribbon-content-dropdown-inner {
-    @apply mt-2;
-    width: 450px;
+    @apply mt-2 px-5 py-4;
+    width: 480px;
     max-height: 70vh;
     @apply overflow-y-auto scrollbar-thin;
     background: linear-gradient(to bottom, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));

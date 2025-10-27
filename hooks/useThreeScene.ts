@@ -5,7 +5,7 @@ import { SceneManager } from '@/lib/three/SceneManager';
 import { Toolhead } from '@/lib/three/Toolhead';
 import { PathRenderer } from '@/lib/three/PathRenderer';
 import { PlaybackController } from '@/lib/three/PlaybackController';
-import type { CameraView } from '@/types';
+import { CameraView } from '@/lib/Constants';
 
 export function useThreeScene(containerRef: React.RefObject<HTMLDivElement>) {
   const [isInitialized, setIsInitialized] = useState(false);

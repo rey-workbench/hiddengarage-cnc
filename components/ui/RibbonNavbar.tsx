@@ -1,72 +1,64 @@
 'use client';
 
 import { ReactNode, useState, useRef, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useActiveTab } from '@/hooks/useActiveTab';
+import { CNCConstants, type TabType } from '@/lib/Constants';
+
+type TabName = TabType;
 
 interface RibbonNavbarProps {
   children: ReactNode;
   sceneManagers?: any;
 }
 
-type TabRoute = '/gcode' | '/image' | '/settings' | '/statistics' | '/legend';
-
-export default function RibbonNavbar({ children, sceneManagers }: RibbonNavbarProps) {
-  const pathname = usePathname();
-  const router = useRouter();
+export default function RibbonNavbar({ children }: RibbonNavbarProps) {
+  const { activeTab, setActiveTab } = useActiveTab();
   const { tab } = useTranslation();
   const [showContent, setShowContent] = useState(false);
   const [tabPosition, setTabPosition] = useState({ left: 0, width: 0 });
   const [mounted, setMounted] = useState(false);
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const navbarRef = useRef<HTMLDivElement>(null);
-  
+
+  // Get tabs from constants and add translations
+  const tabs = CNCConstants.tabs.map(t => ({
+    ...t,
+    label: tab(t.name)
+  }));
+
+  // Initialize & show content when tab changes
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (activeTab) setShowContent(true);
+  }, [activeTab]);
 
-  // Auto show content when on any tab route
+  // Update tab indicator position
   useEffect(() => {
-    if (pathname && pathname !== '/') {
-      setShowContent(true);
+    const tabElement = tabRefs.current[activeTab];
+    if (tabElement && mounted) {
+      const rect = tabElement.getBoundingClientRect();
+      setTabPosition({ left: rect.left, width: rect.width });
     }
-  }, [pathname]);
+  }, [activeTab, mounted]);
 
-  const tabs: { route: TabRoute; label: string; icon: string }[] = [
-    { route: '/gcode', label: tab('gcode'), icon: 'fas fa-code' },
-    { route: '/image', label: tab('image'), icon: 'fas fa-image' },
-    { route: '/settings', label: tab('settings'), icon: 'fas fa-cog' },
-    { route: '/statistics', label: tab('statistics'), icon: 'fas fa-chart-bar' },
-    { route: '/legend', label: tab('legend'), icon: 'fas fa-palette' },
-  ];
-
+  // Close dropdown when clicking outside
   useEffect(() => {
-    if (pathname && tabRefs.current[pathname]) {
-      const tabElement = tabRefs.current[pathname];
-      if (tabElement) {
-        const rect = tabElement.getBoundingClientRect();
-        setTabPosition({ left: rect.left, width: rect.width });
-      }
-    }
-  }, [pathname]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
+    if (!showContent) return;
+    
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navbarRef.current && !navbarRef.current.contains(e.target as Node)) {
         setShowContent(false);
       }
     };
 
-    if (showContent) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showContent]);
 
   return (
     <div className="ribbon-navbar" ref={navbarRef}>
-      {/* Title Bar */}
+      {/* Title */}
       <div className="ribbon-titlebar">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
@@ -78,42 +70,28 @@ export default function RibbonNavbar({ children, sceneManagers }: RibbonNavbarPr
         </div>
       </div>
 
-      {/* Ribbon Tabs */}
+      {/* Tabs */}
       <div className="ribbon-tabs">
-        {tabs.map((tab) => (
-          <Link
-            key={tab.route}
-            href={tab.route}
-            prefetch={true}
-            onClick={(e) => {
-              e.preventDefault();
-              if (pathname === tab.route) {
-                setShowContent(!showContent);
-              } else {
-                setShowContent(true);
-                router.push(tab.route);
-              }
+        {tabs.map((t) => (
+          <button
+            key={t.name}
+            ref={(el) => { tabRefs.current[t.name] = el; }}
+            className={`ribbon-tab ${activeTab === t.name ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab(t.name);
+              setShowContent(true);
             }}
-            ref={(el) => { tabRefs.current[tab.route] = el as any; }}
-            className={`ribbon-tab ${pathname === tab.route ? 'active' : ''}`}
           >
-            <i className={`${tab.icon} text-sm`} />
-            <span>{mounted ? tab.label : ''}</span>
-          </Link>
+            <i className={`${t.icon} text-sm`} />
+            <span>{mounted ? t.label : ''}</span>
+          </button>
         ))}
       </div>
 
-      {/* Ribbon Content Dropdown */}
-      {showContent && pathname && pathname !== '/' && (
-        <div 
-          className="ribbon-content-dropdown"
-          style={{
-            left: `${tabPosition.left}px`,
-          }}
-        >
-          <div className="ribbon-content-dropdown-inner">
-            {children}
-          </div>
+      {/* Content Dropdown */}
+      {showContent && (
+        <div className="ribbon-content-dropdown" style={{ left: `${tabPosition.left}px` }}>
+          <div className="ribbon-content-dropdown-inner">{children}</div>
         </div>
       )}
     </div>

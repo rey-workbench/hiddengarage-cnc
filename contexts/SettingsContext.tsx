@@ -1,8 +1,9 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import type { Settings } from '@/types';
-import { ColorMode } from '@/types';
+import { useLocale } from '@/contexts/LocaleContext';
+import type { Settings } from '@/lib/Constants';
+import { ColorMode } from '@/lib/Constants';
 import { CNCConstants } from '@/lib/Constants';
 
 interface SettingsContextType {
@@ -12,13 +13,13 @@ interface SettingsContextType {
 }
 
 const defaultSettings: Settings = {
-  playbackSpeed: CNCConstants.DEFAULTS.PLAYBACK_SPEED,
-  arcSegments: CNCConstants.DEFAULTS.ARC_SEGMENTS,
-  colorMode: ColorMode.DEFAULT,
+  playbackSpeed: CNCConstants.defaults.playbackSpeed,
+  arcSegments: CNCConstants.defaults.arcSegments,
+  colorMode: ColorMode.Default,
   showGrid: true,
   showAxes: true,
   showToolhead: true,
-  toolheadSize: CNCConstants.DEFAULTS.TOOLHEAD_SIZE,
+  toolheadSize: CNCConstants.defaults.toolheadSize,
   language: 'id',
 };
 
@@ -26,8 +27,10 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
+  const { loadLocale } = useLocale();
 
   useEffect(() => {
+    // Load saved settings from localStorage
     const savedSettings = localStorage.getItem('cnc-settings');
     if (savedSettings) {
       try {
@@ -45,13 +48,18 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       
       try {
         localStorage.setItem('cnc-settings', JSON.stringify(newSettings));
+        
+        // If language is being updated, trigger locale change
+        if (updates.language && updates.language !== prev.language) {
+          loadLocale(updates.language);
+        }
       } catch (error) {
         console.error('Failed to save settings:', error);
       }
       
       return newSettings;
     });
-  }, []);
+  }, [loadLocale]);
 
   const resetSettings = useCallback(() => {
     setSettings(defaultSettings);

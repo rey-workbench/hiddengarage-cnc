@@ -1,4 +1,4 @@
-import type { SVGConversionOptions } from '@/types';
+import type { SVGConversionOptions } from '@/lib/Constants';
 import { CNCConstants } from './Constants';
 
 export class SVGConverter {
@@ -7,9 +7,9 @@ export class SVGConverter {
   constructor() {
     this.options = {
       scale: 1,
-      feedRate: CNCConstants.DEFAULTS.FEED_RATE,
-      cutDepth: CNCConstants.DEFAULTS.CUT_DEPTH,
-      safeZ: CNCConstants.DEFAULTS.SAFE_Z,
+      feedRate: CNCConstants.defaults.feedRate,
+      cutDepth: CNCConstants.defaults.cutDepth,
+      safeZ: CNCConstants.defaults.safeZ,
     };
   }
 

@@ -1,223 +1,163 @@
-// CNC Constants - Configuration values
-export const CNCConstants = {
-  DEFAULTS: {
-    FEED_RATE: 600,
-    SPINDLE_SPEED: 12000,
-    ARC_SEGMENTS: 60,
-    SAFE_Z: 5,
-    CUT_DEPTH: -2,
-    PLAYBACK_SPEED: 1,
-    TOOLHEAD_SIZE: 1,
-    TOOLHEAD_AUTO_HIDE_SIZE: 500,
-    LARGE_FILE_WARNING: 50000,
-    VERY_LARGE_FILE_WARNING: 100000,
-  },
-  COLORS: {
-    RAPID: 0xffd166,
-    LINEAR_CUT: 0xff0000,
-    ARC_CUT: 0x00ff00,
-    TOOLHEAD: 0xff3333,
-    GRID: 0x444444,
-    AXIS_X: 0xff0000,
-    AXIS_Y: 0x00ff00,
-    AXIS_Z: 0x0000ff,
-    PROGRESSIVE_START: 0xffffff,
-    PROGRESSIVE_X: 0xff0000,
-    PROGRESSIVE_Y: 0x00ff00,
-  },
-  REGEX: {
-    GCODE_COMMAND: /([GMXYZIJKFSR])([-+]?[\d.]+)/gi,
-    COMMENT: /;.*$/,
-    WHITESPACE: /\s+/g,
-  },
-};
+// ============================================
+// TYPES & INTERFACES
+// ============================================
 
-// DEPRECATED: TRANSLATIONS moved to locales/en.json and locales/id.json
-// Use next-intl useTranslations() hook instead
-// This object kept temporarily for backward compatibility during migration
-export const TRANSLATIONS = {
-  en: {
-    tab: {
-      gcode: 'G-Code',
-      image: 'Image → G-Code',
-      settings: 'Settings',
-      statistics: 'Statistics',
-      legend: 'Legend',
-    },
-    gcode: {
-      loadTitle: 'Load G-Code',
-      loadFile: 'Load File',
-      example: 'Example',
-      export: 'Export',
-      editorTitle: 'G-Code Editor',
-      placeholder: 'Paste or load G-code here... Supports: G00, G01, G02, G03, G90, G91, G20, G21, M03, M05',
-      parse: 'Parse & Visualize',
-      arcSegments: 'Arc Segments:',
-    },
-    svg: {
-      loadTitle: 'Load SVG File',
-      description: 'Upload SVG file to convert paths, shapes, and lines to G-code. Supports: path, line, polyline, polygon, rect, circle, ellipse',
-      selectFile: 'Select SVG File',
-      settingsTitle: 'SVG Conversion Settings',
-      warning: '⚠️ <strong>Note:</strong> Complex SVG (screenshots, photos) can generate very large G-code files. For best results, use simple vector graphics (logos, outlines).',
-      tipText: '💡 <strong>Tip:</strong> If object is too large or not visible, try Scale=0.01 or 0.001',
-      scale: 'Scale:',
-      feedRate: 'Feed Rate (mm/min):',
-      cutDepth: 'Cut Depth (mm):',
-      safeZ: 'Safe Z (mm):',
-      convert: 'Convert to G-Code',
-    },
-    settings: {
-      simulation: 'Simulation Settings',
-      playbackSpeed: 'Playback Speed',
-      colorMode: 'Color Mode',
-      colorDefault: 'Default (movement type)',
-      colorAxis: 'Axis (movement direction)',
-      colorProgressive: 'Progressive (realtime)',
-      progressiveModeDesc: '💡 <strong>Progressive Mode:</strong> Lines start white and change color based on movement direction:<br><span style="color:#ff0000;">● Red</span> = X-axis movement (horizontal)<br><span style="color:#00ff00;">● Green</span> = Y-axis movement (vertical)',
-      displayOptions: 'Display Options',
-      showGrid: 'Show Grid',
-      showAxes: 'Show Axes',
-      showToolhead: 'Show Toolhead',
-      toolheadSize: 'Toolhead Size',
-      toolheadDesc: '💡 Toolhead (red cone) shows tool position during simulation',
-      cameraPresets: 'Camera Presets',
-      viewTop: 'Top',
-      viewFront: 'Front',
-      viewSide: 'Side',
-      viewIso: 'ISO',
-    },
-    playback: {
-      title: 'Playback',
-      play: 'Play',
-      pause: 'Pause',
-      reset: 'Reset',
-      toolPosition: 'Tool Position',
-    },
-    stats: {
-      title: 'Path Statistics',
-      totalDistance: 'Total Distance:',
-      rapidDistance: 'Rapid Distance:',
-      cutDistance: 'Cut Distance:',
-      estimatedTime: 'Estimated Time:',
-      lines: 'Lines:',
-    },
-    legend: {
-      defaultMode: 'Default & Axis Mode',
-      rapid: 'Rapid (G00) - Yellow',
-      linearCut: 'Linear Cut (G01) - Red',
-      arcCut: 'Arc Cut (G02/G03) - Green',
-      progressiveMode: 'Progressive Mode',
-      progressiveDesc: 'Color based on movement direction',
-      xAxis: 'X-Axis (horizontal) - Red',
-      yAxis: 'Y-Axis (vertical) - Green',
-    },
-    status: {
-      ready: 'Ready - Load or paste G-code to start',
-      parsing: 'Parsing G-code...',
-      rendering: 'Building 3D visualization...',
-    },
-    msg: {
-      gcodeSuccess: 'G-code parsed successfully!',
-      segments: 'segments',
-      largeFile: 'Large file detected:',
-      veryLargeFile: 'Very large file!',
-      renderingSlow: '- Rendering may be slow',
-      reduceSegments: '- Consider reducing arc segments',
-      objectLarge: 'Object is very large',
-      useSmallScale: '- Toolhead hidden for better view',
-    },
+export interface Point3D {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export enum SegmentType {
+  Rapid = 'rapid',
+  Linear = 'linear',
+  ArcCW = 'arc_cw',
+  ArcCCW = 'arc_ccw',
+}
+
+export enum ColorMode {
+  Default = 'default',
+  Axis = 'axis',
+  Progressive = 'progressive',
+}
+
+export enum CameraView {
+  Top = 'top',
+  Front = 'front',
+  Side = 'side',
+  Isometric = 'isometric',
+}
+
+export interface GCodeSegment {
+  type: SegmentType;
+  from: [number, number, number];
+  to: [number, number, number];
+  feed?: number;
+  spindle?: number;
+  center?: [number, number, number];
+  radius?: number;
+  startAngle?: number;
+  endAngle?: number;
+  clockwise?: boolean;
+}
+
+export interface BoundingBox {
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+  minZ: number;
+  maxZ: number;
+}
+
+export interface PathStatistics {
+  totalDistance: number;
+  rapidDistance: number;
+  cutDistance: number;
+  estimatedTime: number;
+  lineCount: number;
+}
+
+export interface ParseResult {
+  segments: GCodeSegment[];
+  bbox: BoundingBox;
+  stats: PathStatistics;
+}
+
+export interface ToolPosition {
+  x: number;
+  y: number;
+  z: number;
+  feed: number;
+  spindle: 'ON' | 'OFF';
+}
+
+export interface SimulationState {
+  isPlaying: boolean;
+  isPaused: boolean;
+  currentSegmentIndex: number;
+  progress: number;
+  speed: number;
+}
+
+export interface SVGConversionOptions {
+  scale: number;
+  feedRate: number;
+  cutDepth: number;
+  safeZ: number;
+}
+
+export interface Settings {
+  playbackSpeed: number;
+  arcSegments: number;
+  colorMode: ColorMode;
+  showGrid: boolean;
+  showAxes: boolean;
+  showToolhead: boolean;
+  toolheadSize: number;
+  language: 'en' | 'id';
+}
+
+export type TabType = 'gcode' | 'image' | 'settings' | 'statistics' | 'legend';
+
+export interface PanelState {
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+  isMinimized: boolean;
+}
+
+export interface UIState {
+  activeTab: TabType;
+  isPanelMinimized: boolean;
+  isPlaybackMinimized: boolean;
+  statusMessage: string;
+  statusType: 'idle' | 'success' | 'error' | 'warning' | 'info';
+  isLoading: boolean;
+  loadingMessage: string;
+  controlPanelState: PanelState;
+  playbackPanelState: PanelState;
+}
+
+// ============================================
+// CONSTANTS & CONFIGURATION
+// ============================================
+
+export const CNCConstants = {
+  defaults: {
+    feedRate: 600,
+    spindleSpeed: 12000,
+    arcSegments: 60,
+    safeZ: 5,
+    cutDepth: -2,
+    playbackSpeed: 1,
+    toolheadSize: 1,
+    toolheadAutoHideSize: 500,
+    largeFileWarning: 50000,
+    veryLargeFileWarning: 100000,
   },
-  id: {
-    tab: {
-      gcode: 'G-Code',
-      image: 'Gambar → G-Code',
-      settings: 'Pengaturan',
-      statistics: 'Statistik',
-      legend: 'Legenda',
-    },
-    gcode: {
-      loadTitle: 'Muat G-Code',
-      loadFile: 'Muat File',
-      example: 'Contoh',
-      export: 'Ekspor',
-      editorTitle: 'Editor G-Code',
-      placeholder: 'Tempel atau muat G-code di sini... Mendukung: G00, G01, G02, G03, G90, G91, G20, G21, M03, M05',
-      parse: 'Parse & Visualisasi',
-      arcSegments: 'Segmen Arc:',
-    },
-    svg: {
-      loadTitle: 'Muat File SVG',
-      description: 'Unggah file SVG untuk mengkonversi path, bentuk, dan garis ke G-code. Mendukung: path, line, polyline, polygon, rect, circle, ellipse',
-      selectFile: 'Pilih File SVG',
-      settingsTitle: 'Pengaturan Konversi SVG',
-      warning: '⚠️ <strong>Catatan:</strong> SVG kompleks (screenshot, foto) dapat menghasilkan file G-code yang sangat besar. Untuk hasil terbaik, gunakan grafik vektor sederhana (logo, outline).',
-      tipText: '💡 <strong>Tips:</strong> Jika objek terlalu besar atau tidak terlihat, coba Scale=0.01 atau 0.001',
-      scale: 'Skala:',
-      feedRate: 'Feed Rate (mm/min):',
-      cutDepth: 'Kedalaman Potong (mm):',
-      safeZ: 'Safe Z (mm):',
-      convert: 'Konversi ke G-Code',
-    },
-    settings: {
-      simulation: 'Pengaturan Simulasi',
-      playbackSpeed: 'Kecepatan Playback',
-      colorMode: 'Mode Warna',
-      colorDefault: 'Default (tipe gerakan)',
-      colorAxis: 'Axis (arah gerakan)',
-      colorProgressive: 'Progressive (realtime)',
-      progressiveModeDesc: '💡 <strong>Mode Progressive:</strong> Garis mulai putih dan berubah warna berdasarkan arah gerakan:<br><span style="color:#ff0000;">● Merah</span> = gerakan sumbu-X (horizontal)<br><span style="color:#00ff00;">● Hijau</span> = gerakan sumbu-Y (vertikal)',
-      displayOptions: 'Opsi Tampilan',
-      showGrid: 'Tampilkan Grid',
-      showAxes: 'Tampilkan Sumbu',
-      showToolhead: 'Tampilkan Toolhead',
-      toolheadSize: 'Ukuran Toolhead',
-      toolheadDesc: '💡 Toolhead (kerucut merah) menunjukkan posisi tool saat simulasi',
-      cameraPresets: 'Preset Kamera',
-      viewTop: 'Atas',
-      viewFront: 'Depan',
-      viewSide: 'Samping',
-      viewIso: 'ISO',
-    },
-    playback: {
-      title: 'Playback',
-      play: 'Putar',
-      pause: 'Jeda',
-      reset: 'Reset',
-      toolPosition: 'Posisi Tool',
-    },
-    stats: {
-      title: 'Statistik Path',
-      totalDistance: 'Total Jarak:',
-      rapidDistance: 'Jarak Rapid:',
-      cutDistance: 'Jarak Potong:',
-      estimatedTime: 'Waktu Estimasi:',
-      lines: 'Baris:',
-    },
-    legend: {
-      defaultMode: 'Mode Default & Axis',
-      rapid: 'Rapid (G00) - Kuning',
-      linearCut: 'Potong Linear (G01) - Merah',
-      arcCut: 'Potong Arc (G02/G03) - Hijau',
-      progressiveMode: 'Mode Progressive',
-      progressiveDesc: 'Warna berdasarkan arah gerakan',
-      xAxis: 'Sumbu-X (horizontal) - Merah',
-      yAxis: 'Sumbu-Y (vertikal) - Hijau',
-    },
-    status: {
-      ready: 'Siap - Muat atau tempel G-code untuk memulai',
-      parsing: 'Memproses G-code...',
-      rendering: 'Membangun visualisasi 3D...',
-    },
-    msg: {
-      gcodeSuccess: 'G-code berhasil diproses!',
-      segments: 'segmen',
-      largeFile: 'File besar terdeteksi:',
-      veryLargeFile: 'File sangat besar!',
-      renderingSlow: '- Rendering mungkin lambat',
-      reduceSegments: '- Pertimbangkan mengurangi segmen arc',
-      objectLarge: 'Objek sangat besar',
-      useSmallScale: '- Toolhead disembunyikan untuk tampilan lebih baik',
-    },
+  tabs: [
+    { name: 'gcode' as const, icon: 'fas fa-code' },
+    { name: 'image' as const, icon: 'fas fa-image' },
+    { name: 'settings' as const, icon: 'fas fa-cog' },
+    { name: 'statistics' as const, icon: 'fas fa-chart-bar' },
+    { name: 'legend' as const, icon: 'fas fa-palette' },
+  ],
+  colors: {
+    rapid: 0xffd166,
+    linearCut: 0xff0000,
+    arcCut: 0x00ff00,
+    toolhead: 0xff3333,
+    grid: 0x444444,
+    axisX: 0xff0000,
+    axisY: 0x00ff00,
+    axisZ: 0x0000ff,
+    progressiveStart: 0xffffff,
+    progressiveX: 0xff0000,
+    progressiveY: 0x00ff00,
+  },
+  regex: {
+    gcodeCommand: /([GMXYZIJKFSR])([-+]?[\d.]+)/gi,
+    comment: /;.*$/,
+    whitespace: /\s+/g,
   },
 };

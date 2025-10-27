@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { CNCConstants } from '../Constants';
-import type { ToolPosition } from '@/types';
+import type { ToolPosition } from '@/lib/Constants';
 
 export class Toolhead {
   private group: THREE.Group;
@@ -21,7 +21,7 @@ export class Toolhead {
     // Cone geometry - tip pointing down
     const coneGeo = new THREE.ConeGeometry(0.5, 2, 16, 1);
     const coneMat = new THREE.MeshStandardMaterial({
-      color: CNCConstants.COLORS.TOOLHEAD,
+      color: CNCConstants.colors.toolhead,
       metalness: 0.6,
       roughness: 0.3,
       transparent: true,
@@ -36,7 +36,7 @@ export class Toolhead {
     // Wireframe outline
     const wireframeGeo = new THREE.WireframeGeometry(coneGeo);
     const wireframeMat = new THREE.LineBasicMaterial({
-      color: CNCConstants.COLORS.TOOLHEAD,
+      color: CNCConstants.colors.toolhead,
       linewidth: 1,
       transparent: true,
       opacity: 0.5,
@@ -85,7 +85,7 @@ export class Toolhead {
   }
 
   autoHideForLargeObject(objectSize: number): boolean {
-    if (objectSize > CNCConstants.DEFAULTS.TOOLHEAD_AUTO_HIDE_SIZE && this.group.visible) {
+    if (objectSize > CNCConstants.defaults.toolheadAutoHideSize && this.group.visible) {
       this.group.visible = false;
       console.log('  ⚠️ Toolhead auto-hidden (object too large). Enable in Settings tab if needed.');
       return true;

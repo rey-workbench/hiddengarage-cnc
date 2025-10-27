@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from 'react';
 import type { PlaybackController } from '@/lib/three/PlaybackController';
 import { useSimulation } from '@/contexts/SimulationContext';
-import type { GCodeSegment } from '@/types';
+import { GCodeSegment } from '@/lib/Constants';
 
 export function usePlayback(
   playbackController: PlaybackController | null,

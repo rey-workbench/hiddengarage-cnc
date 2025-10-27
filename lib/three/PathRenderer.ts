@@ -1,13 +1,13 @@
 import * as THREE from 'three';
-import type { GCodeSegment } from '@/types';
-import { SegmentType, ColorMode } from '@/types';
+import type { GCodeSegment } from '@/lib/Constants';
+import { SegmentType, ColorMode } from '@/lib/Constants';
 import { CNCConstants } from '../Constants';
 
 export class PathRenderer {
   private scene: THREE.Scene;
   private segments: GCodeSegment[] = [];
   private pathGroup: THREE.Group;
-  private colorMode: ColorMode = ColorMode.DEFAULT;
+  private colorMode: ColorMode = ColorMode.Default;
 
   constructor(scene: THREE.Scene) {
     this.scene = scene;
@@ -59,28 +59,28 @@ export class PathRenderer {
   }
 
   private getSegmentColor(segment: GCodeSegment, index: number): THREE.Color {
-    if (this.colorMode === ColorMode.DEFAULT) {
+    if (this.colorMode === ColorMode.Default) {
       return this.getDefaultColor(segment);
-    } else if (this.colorMode === ColorMode.AXIS) {
+    } else if (this.colorMode === ColorMode.Axis) {
       return this.getAxisColor(segment);
-    } else if (this.colorMode === ColorMode.PROGRESSIVE) {
+    } else if (this.colorMode === ColorMode.Progressive) {
       return this.getProgressiveColor(segment, index);
     }
     
-    return new THREE.Color(CNCConstants.COLORS.LINEAR_CUT);
+    return new THREE.Color(CNCConstants.colors.linearCut);
   }
 
   private getDefaultColor(segment: GCodeSegment): THREE.Color {
     switch (segment.type) {
-      case SegmentType.RAPID:
-        return new THREE.Color(CNCConstants.COLORS.RAPID);
-      case SegmentType.LINEAR:
-        return new THREE.Color(CNCConstants.COLORS.LINEAR_CUT);
-      case SegmentType.ARC_CW:
-      case SegmentType.ARC_CCW:
-        return new THREE.Color(CNCConstants.COLORS.ARC_CUT);
+      case SegmentType.Rapid:
+        return new THREE.Color(CNCConstants.colors.rapid);
+      case SegmentType.Linear:
+        return new THREE.Color(CNCConstants.colors.linearCut);
+      case SegmentType.ArcCW:
+      case SegmentType.ArcCCW:
+        return new THREE.Color(CNCConstants.colors.arcCut);
       default:
-        return new THREE.Color(CNCConstants.COLORS.LINEAR_CUT);
+        return new THREE.Color(CNCConstants.colors.linearCut);
     }
   }
 
@@ -89,24 +89,24 @@ export class PathRenderer {
     const dy = Math.abs(segment.to[1] - segment.from[1]);
     const dz = Math.abs(segment.to[2] - segment.from[2]);
 
-    if (segment.type === SegmentType.RAPID) {
-      return new THREE.Color(CNCConstants.COLORS.RAPID);
+    if (segment.type === SegmentType.Rapid) {
+      return new THREE.Color(CNCConstants.colors.rapid);
     }
 
     if (dx > dy && dx > dz) {
-      return new THREE.Color(CNCConstants.COLORS.PROGRESSIVE_X);
+      return new THREE.Color(CNCConstants.colors.progressiveX);
     } else if (dy > dx && dy > dz) {
-      return new THREE.Color(CNCConstants.COLORS.PROGRESSIVE_Y);
+      return new THREE.Color(CNCConstants.colors.progressiveY);
     } else if (dz > dx && dz > dy) {
-      return new THREE.Color(CNCConstants.COLORS.AXIS_Z);
+      return new THREE.Color(CNCConstants.colors.axisZ);
     }
 
     return new THREE.Color(0xffffff);
   }
 
   private getProgressiveColor(segment: GCodeSegment, index: number): THREE.Color {
-    if (segment.type === SegmentType.RAPID) {
-      return new THREE.Color(CNCConstants.COLORS.RAPID);
+    if (segment.type === SegmentType.Rapid) {
+      return new THREE.Color(CNCConstants.colors.rapid);
     }
 
     const progress = index / this.segments.length;
@@ -114,13 +114,13 @@ export class PathRenderer {
     const dx = Math.abs(segment.to[0] - segment.from[0]);
     const dy = Math.abs(segment.to[1] - segment.from[1]);
 
-    const baseColor = new THREE.Color(CNCConstants.COLORS.PROGRESSIVE_START);
+    const baseColor = new THREE.Color(CNCConstants.colors.progressiveStart);
     
     let targetColor: THREE.Color;
     if (dx > dy) {
-      targetColor = new THREE.Color(CNCConstants.COLORS.PROGRESSIVE_X);
+      targetColor = new THREE.Color(CNCConstants.colors.progressiveX);
     } else {
-      targetColor = new THREE.Color(CNCConstants.COLORS.PROGRESSIVE_Y);
+      targetColor = new THREE.Color(CNCConstants.colors.progressiveY);
     }
 
     return baseColor.lerp(targetColor, progress);

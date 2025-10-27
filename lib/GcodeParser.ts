@@ -5,8 +5,8 @@ import type {
   PathStatistics, 
   ParseResult,
   Point3D 
-} from '@/types';
-import { SegmentType } from '@/types';
+} from '@/lib/Constants';
+import { SegmentType } from '@/lib/Constants';
 
 interface ParserState {
   x: number;
@@ -30,8 +30,8 @@ export class GCodeParser {
       x: 0,
       y: 0,
       z: 0,
-      feedRate: CNCConstants.DEFAULTS.FEED_RATE,
-      spindleSpeed: CNCConstants.DEFAULTS.SPINDLE_SPEED,
+      feedRate: CNCConstants.defaults.feedRate,
+      spindleSpeed: CNCConstants.defaults.spindleSpeed,
       isAbsolute: true,
       isMetric: true,
       spindleOn: false,
@@ -57,7 +57,7 @@ export class GCodeParser {
   }
 
   parse(gcodeText: string, options: { arcSegments?: number } = {}): ParseResult {
-    const arcSegments = options.arcSegments || CNCConstants.DEFAULTS.ARC_SEGMENTS;
+    const arcSegments = options.arcSegments || CNCConstants.defaults.arcSegments;
     
     this.resetState();
     
@@ -82,8 +82,8 @@ export class GCodeParser {
       x: 0,
       y: 0,
       z: 0,
-      feedRate: CNCConstants.DEFAULTS.FEED_RATE,
-      spindleSpeed: CNCConstants.DEFAULTS.SPINDLE_SPEED,
+      feedRate: CNCConstants.defaults.feedRate,
+      spindleSpeed: CNCConstants.defaults.spindleSpeed,
       isAbsolute: true,
       isMetric: true,
       spindleOn: false,
@@ -111,7 +111,7 @@ export class GCodeParser {
   private parseLine(line: string, arcSegments: number): void {
     if (!line || line.startsWith(';') || line.startsWith('(')) return;
 
-    const cleanLine = line.replace(CNCConstants.REGEX.COMMENT, '').trim();
+    const cleanLine = line.replace(CNCConstants.regex.comment, '').trim();
     if (!cleanLine) return;
 
     const commands = this.extractCommands(cleanLine);
@@ -120,7 +120,7 @@ export class GCodeParser {
 
   private extractCommands(line: string): Map<string, number> {
     const commands = new Map<string, number>();
-    const matches = line.matchAll(CNCConstants.REGEX.GCODE_COMMAND);
+    const matches = line.matchAll(CNCConstants.regex.gcodeCommand);
 
     for (const match of matches) {
       const letter = match[1].toUpperCase();
@@ -204,7 +204,7 @@ export class GCodeParser {
     const newPos = this.getNewPosition(commands);
     
     this.segments.push({
-      type: SegmentType.RAPID,
+      type: SegmentType.Rapid,
       from: [this.state.x, this.state.y, this.state.z],
       to: [newPos.x, newPos.y, newPos.z],
     });
@@ -217,7 +217,7 @@ export class GCodeParser {
     const newPos = this.getNewPosition(commands);
 
     this.segments.push({
-      type: SegmentType.LINEAR,
+      type: SegmentType.Linear,
       from: [this.state.x, this.state.y, this.state.z],
       to: [newPos.x, newPos.y, newPos.z],
       feed: this.state.feedRate,
@@ -252,7 +252,7 @@ export class GCodeParser {
 
     for (let k = 0; k < arcPoints.length - 1; k++) {
       this.segments.push({
-        type: clockwise ? SegmentType.ARC_CW : SegmentType.ARC_CCW,
+        type: clockwise ? SegmentType.ArcCW : SegmentType.ArcCCW,
         from: [arcPoints[k].x, arcPoints[k].y, arcPoints[k].z],
         to: [arcPoints[k + 1].x, arcPoints[k + 1].y, arcPoints[k + 1].z],
         feed: this.state.feedRate,
@@ -356,12 +356,12 @@ export class GCodeParser {
 
       totalDistance += distance;
 
-      if (segment.type === SegmentType.RAPID) {
+      if (segment.type === SegmentType.Rapid) {
         rapidDistance += distance;
         totalTime += distance / 6000;
       } else {
         cutDistance += distance;
-        const feed = segment.feed || CNCConstants.DEFAULTS.FEED_RATE;
+        const feed = segment.feed || CNCConstants.defaults.feedRate;
         totalTime += distance / feed;
       }
     }

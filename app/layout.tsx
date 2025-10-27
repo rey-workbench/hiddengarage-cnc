@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import './globals.css';
-import { SimulationProvider } from '@/contexts/SimulationContext';
+import { LocaleProvider } from '@/contexts/LocaleContext';
 import { SettingsProvider } from '@/contexts/SettingsContext';
+import { SimulationProvider } from '@/contexts/SimulationContext';
 import { UIProvider } from '@/contexts/UiContext';
 import { WorkspaceProvider } from '@/contexts/WorkspaceContext';
 
@@ -32,7 +32,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <LocaleProvider initialLocale={locale} initialMessages={messages}>
           <SettingsProvider>
             <UIProvider>
               <WorkspaceProvider>
@@ -42,7 +42,7 @@ export default async function RootLayout({
               </WorkspaceProvider>
             </UIProvider>
           </SettingsProvider>
-        </NextIntlClientProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-import type { GCodeSegment, ToolPosition, SimulationState } from '@/types';
+import type { GCodeSegment, ToolPosition, SimulationState } from '@/lib/Constants';
 import { Toolhead } from './Toolhead';
 import { PathRenderer } from './PathRenderer';
 

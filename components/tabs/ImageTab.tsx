@@ -3,7 +3,7 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useUI } from '@/contexts/UiContext';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ImageTabProps {
   onGCodeGenerated: (gcode: string) => void;
@@ -67,7 +67,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     stepover: 50,
   });
 
-  const t = useTranslations();
+  const { image } = useTranslation();
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -105,12 +105,10 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           <i className="fas fa-image text-6xl text-dark-600 mb-4" />
         </div>
         <h3 className="text-sm font-semibold text-gray-100 mb-2">
-          {settings.language === 'id' ? 'Pilih Gambar' : 'Select Image'}
+          {image('selectImage')}
         </h3>
         <p className="text-xs text-dark-400 mb-4">
-          {settings.language === 'id' 
-            ? 'Upload gambar JPG, PNG, atau BMP untuk dikonversi ke G-Code'
-            : 'Upload JPG, PNG, or BMP image to convert to G-Code'}
+          {image('uploadDesc')}
         </p>
         <input
           ref={fileInputRef}
@@ -124,7 +122,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           className="btn btn-primary w-full flex items-center justify-center gap-2"
         >
           <i className="fas fa-folder-open text-xs" />
-          <span>{settings.language === 'id' ? 'Pilih Gambar' : 'Choose Image'}</span>
+          <span>{image('chooseImage')}</span>
         </button>
       </div>
 
@@ -140,19 +138,17 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     <div className="space-y-4">
       <div className="p-3 bg-primary-500/10 border-l-2 border-primary-500 rounded text-xs text-dark-300">
         <i className="fas fa-info-circle mr-1" />
-        {settings.language === 'id' 
-          ? 'Atur dimensi material dan posisi origin seperti di Fusion 360'
-          : 'Configure material dimensions and origin position like in Fusion 360'}
+        {image('setupDesc')}
       </div>
 
       <div>
         <h4 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">
-          {settings.language === 'id' ? 'Dimensi Material (Stock)' : 'Stock Dimensions'}
+          {image('stockDimensionsTitle')}
         </h4>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-sm text-dark-300">
-              {settings.language === 'id' ? 'Lebar (Width)' : 'Width'} (mm)
+              {image('width')} (mm)
             </label>
             <input
               type="number"
@@ -163,7 +159,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           </div>
           <div className="flex items-center justify-between">
             <label className="text-sm text-dark-300">
-              {settings.language === 'id' ? 'Tinggi (Height)' : 'Height'} (mm)
+              {image('height')} (mm)
             </label>
             <input
               type="number"
@@ -174,7 +170,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           </div>
           <div className="flex items-center justify-between">
             <label className="text-sm text-dark-300">
-              {settings.language === 'id' ? 'Ketebalan (Thickness)' : 'Thickness'} (mm)
+              {image('thickness')} (mm)
             </label>
             <input
               type="number"
@@ -188,7 +184,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
 
       <div>
         <h4 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">
-          {settings.language === 'id' ? 'Work Coordinate System (WCS)' : 'Work Coordinate System'}
+          {image('wcsTitle')}
         </h4>
         <div className="grid grid-cols-3 gap-2 mb-2">
           {(['left', 'center', 'right'] as const).map((pos) => (
@@ -218,7 +214,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
         onClick={() => setCurrentStep('strategy')}
         className="btn btn-success w-full"
       >
-        {settings.language === 'id' ? 'Lanjut ke Strategy' : 'Continue to Strategy'}
+        {image('continueToStrategy')}
         <i className="fas fa-arrow-right ml-2 text-xs" />
       </button>
     </div>
@@ -228,9 +224,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     <div className="space-y-4">
       <div className="p-3 bg-primary-500/10 border-l-2 border-primary-500 rounded text-xs text-dark-300">
         <i className="fas fa-info-circle mr-1" />
-        {settings.language === 'id' 
-          ? 'Pilih strategi machining seperti di Fusion 360 CAM'
-          : 'Choose machining strategy like in Fusion 360 CAM'}
+        {image('strategyDesc')}
       </div>
 
       <div className="space-y-2">
@@ -246,12 +240,10 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
             <i className="fas fa-draw-polygon text-xl text-primary-400 mt-1" />
             <div className="flex-1">
               <div className="font-semibold text-sm text-gray-100 mb-1">
-                {settings.language === 'id' ? '2D Contour (Garis Luar)' : '2D Contour (Outline)'}
+                {image('contourTitle')}
               </div>
               <div className="text-xs text-dark-300">
-                {settings.language === 'id' 
-                  ? 'Potong mengikuti garis tepi gambar. Cocok untuk cutting shapes.'
-                  : 'Cut along the edges of the image. Good for cutting shapes.'}
+                {image('contourDescription')}
               </div>
             </div>
           </div>
@@ -269,12 +261,10 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
             <i className="fas fa-fill-drip text-xl text-primary-400 mt-1" />
             <div className="flex-1">
               <div className="font-semibold text-sm text-gray-100 mb-1">
-                {settings.language === 'id' ? '2D Pocket (Isi Area)' : '2D Pocket (Fill Area)'}
+                {image('pocketTitle')}
               </div>
               <div className="text-xs text-dark-300">
-                {settings.language === 'id' 
-                  ? 'Isi area tertutup dengan toolpath zigzag. Cocok untuk clearing.'
-                  : 'Fill closed areas with zigzag toolpath. Good for material removal.'}
+                {image('pocketDescription')}
               </div>
             </div>
           </div>
@@ -292,12 +282,10 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
             <i className="fas fa-pen-nib text-xl text-primary-400 mt-1" />
             <div className="flex-1">
               <div className="font-semibold text-sm text-gray-100 mb-1">
-                {settings.language === 'id' ? 'Engrave (Ukir)' : 'Engrave (Trace)'}
+                {image('engraveTitle')}
               </div>
               <div className="text-xs text-dark-300">
-                {settings.language === 'id' 
-                  ? 'Ukir mengikuti setiap garis pada gambar. Cocok untuk detail.'
-                  : 'Trace every line in the image. Good for detailed engraving.'}
+                {image('engraveDescription')}
               </div>
             </div>
           </div>
@@ -310,13 +298,13 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           className="btn flex-1"
         >
           <i className="fas fa-arrow-left mr-2 text-xs" />
-          {settings.language === 'id' ? 'Kembali' : 'Back'}
+          {image('back')}
         </button>
         <button
           onClick={() => setCurrentStep('parameters')}
           className="btn btn-success flex-1"
         >
-          {settings.language === 'id' ? 'Lanjut ke Parameters' : 'Continue to Parameters'}
+          {image('continueToParameters')}
           <i className="fas fa-arrow-right ml-2 text-xs" />
         </button>
       </div>
@@ -327,12 +315,12 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     <div className="space-y-4">
       <div>
         <h4 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">
-          {settings.language === 'id' ? 'Tool Configuration' : 'Tool Configuration'}
+          {image('toolConfiguration')}
         </h4>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-sm text-dark-300">
-              {settings.language === 'id' ? 'Diameter Bit' : 'Bit Diameter'} (mm)
+              {image('bitDiameter')} (mm)
             </label>
             <input
               type="number"
@@ -344,7 +332,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           </div>
           <div className="flex items-center justify-between">
             <label className="text-sm text-dark-300">
-              {settings.language === 'id' ? 'Kedalaman Per Pass' : 'Passing Depth'} (mm)
+              {image('passingDepthLabel')} (mm)
             </label>
             <input
               type="number"
@@ -356,7 +344,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           </div>
           <div className="flex items-center justify-between">
             <label className="text-sm text-dark-300">
-              {settings.language === 'id' ? 'Kedalaman Akhir' : 'Final Depth'} (mm)
+              {image('finalDepthLabel')} (mm)
             </label>
             <input
               type="number"
@@ -381,7 +369,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
 
       <div>
         <h4 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">
-          {settings.language === 'id' ? 'Feeds & Speeds' : 'Feeds & Speeds'}
+          {image('feedsAndSpeeds')}
         </h4>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -444,13 +432,13 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           className="btn flex-1"
         >
           <i className="fas fa-arrow-left mr-2 text-xs" />
-          {settings.language === 'id' ? 'Kembali' : 'Back'}
+          {image('back')}
         </button>
         <button
           onClick={() => setCurrentStep('generate')}
           className="btn btn-success flex-1"
         >
-          {settings.language === 'id' ? 'Lanjut ke Generate' : 'Continue to Generate'}
+          {image('continueToGenerate')}
           <i className="fas fa-arrow-right ml-2 text-xs" />
         </button>
       </div>
@@ -464,7 +452,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     }
 
     try {
-      showInfo(settings.language === 'id' ? 'Memproses gambar...' : 'Processing image...');
+      showInfo(image('processingImage'));
 
       const { detectImageEdges, scaleContoursToStock } = await import('@/lib/ImageProcessor');
       const { generateGCodeFromImage } = await import('@/lib/ImageToGcode');
@@ -473,15 +461,11 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
       const contours = await detectImageEdges(selectedImage);
       
       if (contours.length === 0) {
-        showError(settings.language === 'id' 
-          ? 'Tidak ada edge terdeteksi. Coba gambar dengan kontras lebih tinggi.'
-          : 'No edges detected. Try an image with higher contrast.');
+        showError(image('noEdgesDetected'));
         return;
       }
 
-      showInfo(settings.language === 'id' 
-        ? `Terdeteksi ${contours.length} contour. Generating G-Code...`
-        : `Detected ${contours.length} contours. Generating G-Code...`);
+      showInfo(image('contoursDetected').replace('{count}', contours.length.toString()));
 
       // Get image dimensions from canvas
       const img = new Image();
@@ -512,17 +496,13 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
         stepover: machiningConfig.stepover,
       });
 
-      showSuccess(settings.language === 'id' 
-        ? `G-Code berhasil di-generate! (${gcode.split('\n').length} baris) - Switch ke tab G-Code`
-        : `G-Code generated successfully! (${gcode.split('\n').length} lines) - Switching to G-Code tab`);
+      showSuccess(image('gcodeGenerated').replace('{lines}', gcode.split('\n').length.toString()));
 
       // Pass to parent component and trigger switch
       onGCodeGenerated(gcode);
 
     } catch (error) {
-      showError(settings.language === 'id' 
-        ? `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
-        : `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      showError(image('errorMessage').replace('{error}', error instanceof Error ? error.message : 'Unknown error'));
     }
   };
 
@@ -533,12 +513,10 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           <i className="fas fa-check-circle text-green-400 mt-0.5" />
           <div className="flex-1">
             <div className="text-sm font-semibold text-green-400 mb-1">
-              {settings.language === 'id' ? 'Setup Selesai!' : 'Setup Complete!'}
+              {image('setupComplete')}
             </div>
             <div className="text-xs text-dark-300">
-              {settings.language === 'id' 
-                ? 'Siap untuk generate G-Code dengan konfigurasi berikut:'
-                : 'Ready to generate G-Code with the following configuration:'}
+              {image('readyToGenerate')}
             </div>
           </div>
         </div>
@@ -573,14 +551,14 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
           className="btn flex-1"
         >
           <i className="fas fa-arrow-left mr-2 text-xs" />
-          {settings.language === 'id' ? 'Kembali' : 'Back'}
+          {image('back')}
         </button>
         <button
           onClick={handleGenerateGCode}
           className="btn btn-primary flex-1"
         >
           <i className="fas fa-cogs mr-2 text-xs" />
-          {settings.language === 'id' ? 'Generate G-Code' : 'Generate G-Code'}
+          {image('generateGCode')}
         </button>
       </div>
     </div>
