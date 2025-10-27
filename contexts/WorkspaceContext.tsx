@@ -5,17 +5,22 @@ import { createContext, useContext, useState, useMemo, ReactNode } from 'react';
 interface WorkspaceContextType {
   sceneManagers: any;
   setSceneManagers: (managers: any) => void;
+  generatedGCode: string;
+  setGeneratedGCode: (gcode: string) => void;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [sceneManagers, setSceneManagers] = useState<any>(null);
+  const [generatedGCode, setGeneratedGCode] = useState<string>('');
 
   const value = useMemo(() => ({ 
     sceneManagers, 
-    setSceneManagers 
-  }), [sceneManagers]);
+    setSceneManagers,
+    generatedGCode,
+    setGeneratedGCode
+  }), [sceneManagers, generatedGCode]);
 
   return (
     <WorkspaceContext.Provider value={value}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, useEffect } from 'react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useSimulation } from '@/contexts/SimulationContext';
 import { useGCode } from '@/hooks/useGcode';
@@ -10,16 +10,24 @@ interface GCodeTabProps {
   pathRenderer: any;
   sceneManager: any;
   toolhead: any;
+  initialGCode?: string;
 }
 
-export default function GCodeTab({ pathRenderer, sceneManager, toolhead }: GCodeTabProps) {
+export default function GCodeTab({ pathRenderer, sceneManager, toolhead, initialGCode }: GCodeTabProps) {
   const { settings } = useSettings();
   const { segments } = useSimulation();
   const { handleParseGCode, exportGCode } = useGCode(pathRenderer, sceneManager, toolhead);
-  const [gcodeText, setGCodeText] = useState('');
+  const [gcodeText, setGCodeText] = useState(initialGCode || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { gcode } = useTranslation();
+
+  useEffect(() => {
+    if (initialGCode && initialGCode !== gcodeText) {
+      setGCodeText(initialGCode);
+      handleParseGCode(initialGCode);
+    }
+  }, [initialGCode, gcodeText, handleParseGCode]);
 
   const handleFileLoad = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

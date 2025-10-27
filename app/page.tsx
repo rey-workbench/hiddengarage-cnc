@@ -19,8 +19,8 @@ const LegendTab = dynamic(() => import('@/components/tabs/LegendTab'), { ssr: fa
 const ThreeViewer = dynamic(() => import('@/components/viewer/ThreeViewer'), { ssr: false });
 
 export default function Home() {
-  const { sceneManagers, setSceneManagers } = useWorkspace();
-  const { activeTab } = useActiveTab();
+  const { sceneManagers, setSceneManagers, generatedGCode, setGeneratedGCode } = useWorkspace();
+  const { activeTab, setActiveTab } = useActiveTab();
   
   useUIScale();
 
@@ -28,12 +28,22 @@ export default function Home() {
     setSceneManagers(managers);
   }, [setSceneManagers]);
 
+  const handleGCodeGenerated = useCallback((gcode: string) => {
+    setGeneratedGCode(gcode);
+    setActiveTab('gcode');
+  }, [setActiveTab, setGeneratedGCode]);
+
   const renderTab = () => {
     if (!sceneManagers) return null;
 
     const props = {
-      gcode: { pathRenderer: sceneManagers.pathRenderer, sceneManager: sceneManagers.sceneManager, toolhead: sceneManagers.toolhead },
-      image: { onGCodeGenerated: () => {} },
+      gcode: { 
+        pathRenderer: sceneManagers.pathRenderer, 
+        sceneManager: sceneManagers.sceneManager, 
+        toolhead: sceneManagers.toolhead,
+        initialGCode: generatedGCode
+      },
+      image: { onGCodeGenerated: handleGCodeGenerated },
       view: { sceneManager: sceneManagers.sceneManager },
       settings: { sceneManager: sceneManagers.sceneManager },
       statistics: {},

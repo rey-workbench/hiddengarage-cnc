@@ -40,6 +40,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
   const { showSuccess, showError, showInfo } = useUI();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { image } = useTranslation();
   
   const [currentStep, setCurrentStep] = useState<WorkflowStep>('upload');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -67,8 +68,6 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     spindleSpeed: 12000,
     stepover: 50,
   });
-
-  const { image } = useTranslation();
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -472,7 +471,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
         return;
       }
 
-      showInfo(image('contoursDetected').replace('{count}', contours.length.toString()));
+      showInfo(image('contoursDetected', { count: contours.length }));
 
       const img = new window.Image();
       img.src = imagePreview!;
@@ -500,12 +499,12 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
         stepover: machiningConfig.stepover,
       });
 
-      showSuccess(image('gcodeGenerated').replace('{lines}', gcode.split('\n').length.toString()));
+      showSuccess(image('gcodeGenerated', { lines: gcode.split('\n').length }));
 
       onGCodeGenerated(gcode);
 
     } catch (error) {
-      showError(image('errorMessage').replace('{error}', error instanceof Error ? error.message : 'Unknown error'));
+      showError(image('errorMessage', { error: error instanceof Error ? error.message : 'Unknown error' }));
     }
   };
 
