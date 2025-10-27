@@ -50,6 +50,18 @@
     @apply hover:from-amber-400 hover:to-amber-500 hover:border-amber-600;
   }
 
+  /* Custom select dropdown styling */
+  select option {
+    @apply bg-dark-900 text-gray-100;
+    padding: 8px 12px;
+  }
+  
+  select option:hover,
+  select option:focus,
+  select option:checked {
+    @apply bg-dark-700 text-white;
+  }
+
   .btn-danger {
     @apply bg-gradient-to-br from-red-500 to-red-600 border-red-700;
     @apply hover:from-red-400 hover:to-red-500 hover:border-red-600;

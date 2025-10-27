@@ -7,6 +7,7 @@ import { CameraView } from '@/lib/Constants';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useConfirmDialog } from '@/hooks/useConfirmDialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import Select from '@/components/ui/Select';
 
 interface SettingsTabProps {
   sceneManager: any;
@@ -21,19 +22,24 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
 
   return (
     <div className="space-y-4">
-      <div className="border-b border-dark-700 pb-4">
-        <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">
+      <div className="border-b border-dark-700 pb-3">
+        <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">
           {settingsTranslations('simulation')}
         </h3>
         <div className="flex items-center justify-between">
-          <label className="text-sm text-dark-300">{settingsTranslations('arcSegments')}</label>
+          <label className="text-xs text-dark-300">{settingsTranslations('arcSegments')}</label>
           <input type="number" value={settings.arcSegments}
             onChange={(e) => updateSettings({ arcSegments: parseInt(e.target.value) })}
-            min="4" max="256" className="input-base w-20" />
+            min="4" max="256" 
+            className="w-20 px-2.5 py-1.5 rounded-lg text-xs
+              bg-gradient-to-br from-dark-900/70 to-dark-800/60 border border-dark-600/60
+              text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30
+              shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)] hover:border-dark-500/60
+              transition-all duration-200" />
         </div>
       </div>
-      <div className="border-b border-dark-700 pb-4">
-          <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">{settingsTranslations('cameraPresets')}</h3>
+      <div className="border-b border-dark-700 pb-3">
+        <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">{settingsTranslations('cameraPresets')}</h3>
         <div className="grid grid-cols-2 gap-2">
           <button onClick={() => setCameraView(CameraView.Top)} className="btn text-xs">{settingsTranslations('viewTop')}</button>
           <button onClick={() => setCameraView(CameraView.Front)} className="btn text-xs">{settingsTranslations('viewFront')}</button>
@@ -41,16 +47,19 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
           <button onClick={() => setCameraView(CameraView.Isometric)} className="btn text-xs">{settingsTranslations('viewIso')}</button>
         </div>
       </div>
-      <div className="border-b border-dark-700 pb-4">
-        <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">{settingsTranslations('language')}</h3>
-        <select value={settings.language}
-          onChange={(e) => updateSettings({ language: e.target.value as 'en' | 'id' })} className="input-base w-full">
-          <option value="id">🇮🇩 Bahasa Indonesia</option>
-          <option value="en">🇬🇧 English</option>
-        </select>
+      <div className="border-b border-dark-700 pb-3">
+        <Select
+          label={settingsTranslations('language')}
+          value={settings.language}
+          onChange={(e) => updateSettings({ language: e.target.value as 'en' | 'id' })}
+          options={[
+            { value: 'id', label: '🇮🇩 Bahasa Indonesia' },
+            { value: 'en', label: '🇬🇧 English' },
+          ]}
+        />
       </div>
       <div>
-        <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">{settingsTranslations('panelLayout')}</h3>
+        <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">{settingsTranslations('panelLayout')}</h3>
         <button 
           onClick={async () => {
             const confirmed = await showConfirm({

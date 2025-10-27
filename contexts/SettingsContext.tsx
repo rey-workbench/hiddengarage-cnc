@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode, useRef } from 'react';
 import { useLocale } from '@/contexts/LocaleContext';
 import type { Settings } from '@/lib/Constants';
 import { ColorMode } from '@/lib/Constants';
@@ -29,6 +29,8 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const { loadLocale } = useLocale();
+  const previousLanguage = useRef<string>(defaultSettings.language);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     // Load saved settings from localStorage
@@ -37,11 +39,27 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       try {
         const parsed = JSON.parse(savedSettings);
         setSettings({ ...defaultSettings, ...parsed });
+        previousLanguage.current = parsed.language || defaultSettings.language;
       } catch (error) {
         console.error('Failed to parse saved settings:', error);
       }
     }
+    // Mark that initial mount is complete
+    isInitialMount.current = false;
   }, []);
+
+  // Watch for language changes and trigger locale loading (skip initial mount)
+  useEffect(() => {
+    // Skip on initial mount to avoid render-phase updates
+    if (isInitialMount.current) {
+      return;
+    }
+    
+    if (settings.language !== previousLanguage.current) {
+      loadLocale(settings.language);
+      previousLanguage.current = settings.language;
+    }
+  }, [settings.language, loadLocale]);
 
   const updateSettings = useCallback((updates: Partial<Settings>) => {
     setSettings((prev) => {
@@ -49,18 +67,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       
       try {
         localStorage.setItem('cnc-settings', JSON.stringify(newSettings));
-        
-        // If language is being updated, trigger locale change
-        if (updates.language && updates.language !== prev.language) {
-          loadLocale(updates.language);
-        }
       } catch (error) {
         console.error('Failed to save settings:', error);
       }
       
       return newSettings;
     });
-  }, [loadLocale]);
+  }, []);
 
   const resetSettings = useCallback(() => {
     setSettings(defaultSettings);

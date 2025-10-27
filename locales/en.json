@@ -157,7 +157,8 @@
   "status": {
     "ready": "Ready - Load or paste G-code to start",
     "parsing": "Parsing G-code...",
-    "rendering": "Building 3D visualization..."
+    "rendering": "Building 3D visualization...",
+    "loadingLanguage": "Loading language..."
   },
   "msg": {
     "gcodeSuccess": "G-code parsed successfully!",

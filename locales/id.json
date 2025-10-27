@@ -157,7 +157,8 @@
   "status": {
     "ready": "Siap - Muat atau tempel G-code untuk mulai",
     "parsing": "Mem-parse G-code...",
-    "rendering": "Membangun visualisasi 3D..."
+    "rendering": "Membangun visualisasi 3D...",
+    "loadingLanguage": "Memuat bahasa..."
   },
   "msg": {
     "gcodeSuccess": "G-code berhasil di-parse!",

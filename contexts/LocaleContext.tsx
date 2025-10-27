@@ -27,15 +27,34 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
     if (newLocale === locale) return;
     
     setIsLoading(true);
+    
+    // Notify UI to show loading overlay via global state
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('ui-loading', { 
+        detail: { isLoading: true, message: 'Loading language...' } 
+      }));
+    }
+    
     try {
       // Dynamically import the new locale messages
       const newMessages = (await import(`../locales/${newLocale}.json`)).default;
+      
+      // Small delay for smooth transition
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
       setLocale(newLocale);
       setMessages(newMessages);
     } catch (error) {
       console.error('Failed to load locale:', error);
     } finally {
       setIsLoading(false);
+      
+      // Notify UI to hide loading overlay
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('ui-loading', { 
+          detail: { isLoading: false } 
+        }));
+      }
     }
   };
 
@@ -78,17 +97,6 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
       delete (window as any).__loadLocale;
     };
   }, [loadLocale]);
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-dark-900">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-2"></div>
-          <p className="text-dark-300 text-sm">Loading language...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <LocaleContext.Provider value={{ locale, messages, isLoading, loadLocale }}>

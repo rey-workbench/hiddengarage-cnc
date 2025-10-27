@@ -177,6 +177,16 @@ export function UIProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  // Listen for loading events from LocaleContext
+  useEffect(() => {
+    const handleUILoading = ((e: CustomEvent) => {
+      setLoading(e.detail.isLoading, e.detail.message);
+    }) as EventListener;
+
+    window.addEventListener('ui-loading', handleUILoading);
+    return () => window.removeEventListener('ui-loading', handleUILoading);
+  }, [setLoading]);
+
   return (
     <UIContext.Provider
       value={{

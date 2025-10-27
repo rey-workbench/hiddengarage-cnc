@@ -4,6 +4,7 @@ import { useSettings } from '@/contexts/SettingsContext';
 import { useSceneControls } from '@/hooks/useThreeScene';
 import { ColorMode } from '@/lib/Constants';
 import { useTranslation } from '@/hooks/useTranslation';
+import Select from '@/components/ui/Select';
 
 interface ViewTabProps {
   sceneManager: any;
@@ -66,22 +67,16 @@ export default function ViewTab({ sceneManager }: ViewTabProps) {
 
       {/* Color Mode */}
       <div className="border-b border-dark-700 pb-3">
-        <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">
-          {view('colorMode')}
-        </h3>
-        <select
+        <Select
+          label={view('colorMode')}
           value={settings.colorMode}
           onChange={(e) => updateSettings({ colorMode: e.target.value as ColorMode })}
-          className="w-full px-2.5 py-1.5 rounded-lg text-xs
-            bg-gradient-to-br from-dark-900/70 to-dark-800/60 border border-dark-600/60
-            text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30
-            shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)] hover:border-dark-500/60
-            transition-all duration-200 cursor-pointer"
-        >
-          <option value={ColorMode.Default}>{view('colorDefault')}</option>
-          <option value={ColorMode.Axis}>{view('colorAxis')}</option>
-          <option value={ColorMode.Progressive}>{view('colorProgressive')}</option>
-        </select>
+          options={[
+            { value: ColorMode.Default, label: view('colorDefault') },
+            { value: ColorMode.Axis, label: view('colorAxis') },
+            { value: ColorMode.Progressive, label: view('colorProgressive') },
+          ]}
+        />
         {settings.colorMode === ColorMode.Progressive && (
           <p className="text-[10px] text-dark-400 mt-1.5 leading-relaxed">
             {view('progressiveModeDesc')}
