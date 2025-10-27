@@ -26,6 +26,7 @@ export function useTranslation() {
     tab: (key: string) => t(`tab.${key}`),
     gcode: (key: string) => t(`gcode.${key}`),
     image: (key: string) => t(`image.${key}`),
+    view: (key: string) => t(`view.${key}`),
     settings: (key: string) => t(`settings.${key}`),
     playback: (key: string) => t(`playback.${key}`),
     stats: (key: string) => t(`stats.${key}`),

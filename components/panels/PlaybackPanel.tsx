@@ -5,6 +5,7 @@ import { useUI } from '@/contexts/UiContext';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useTranslation } from '@/hooks/useTranslation';
 import DraggablePanel from '../ui/DraggablePanel';
+import Slider from '../ui/Slider';
 
 interface PlaybackPanelProps {
   playbackController: any;
@@ -102,57 +103,17 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
         </div>
 
         {/* Speed Slider */}
-        <div className="relative">
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-dark-300 uppercase tracking-wider">
-              {s('playbackSpeed')}
-            </label>
-            <div className="relative">
-              <div className="absolute inset-0 bg-primary-500/20 rounded blur-sm" />
-              <span className="text-xs text-primary-300 font-mono font-bold relative px-2 py-0.5 bg-primary-500/10 rounded border border-primary-500/30">
-                {settings.playbackSpeed.toFixed(2)}x
-              </span>
-            </div>
-          </div>
-          <input 
-            type="range" 
-            min="0.05" 
-            max="4" 
-            step="0.05" 
-            value={settings.playbackSpeed}
-            onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
-            className="w-full h-2 rounded-lg appearance-none cursor-pointer
-              bg-gradient-to-r from-dark-800 to-dark-700
-              shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]
-              border border-dark-600/50
-              [&::-webkit-slider-thumb]:appearance-none
-              [&::-webkit-slider-thumb]:w-5
-              [&::-webkit-slider-thumb]:h-5
-              [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:bg-gradient-to-br
-              [&::-webkit-slider-thumb]:from-primary-400
-              [&::-webkit-slider-thumb]:to-primary-600
-              [&::-webkit-slider-thumb]:border-2
-              [&::-webkit-slider-thumb]:border-primary-300/50
-              [&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(59,130,246,0.5)]
-              [&::-webkit-slider-thumb]:hover:shadow-[0_0_16px_rgba(59,130,246,0.7)]
-              [&::-webkit-slider-thumb]:hover:scale-110
-              [&::-webkit-slider-thumb]:transition-all
-              [&::-webkit-slider-thumb]:duration-300
-              [&::-moz-range-thumb]:w-5
-              [&::-moz-range-thumb]:h-5
-              [&::-moz-range-thumb]:rounded-full
-              [&::-moz-range-thumb]:bg-gradient-to-br
-              [&::-moz-range-thumb]:from-primary-400
-              [&::-moz-range-thumb]:to-primary-600
-              [&::-moz-range-thumb]:border-2
-              [&::-moz-range-thumb]:border-primary-300/50
-              [&::-moz-range-thumb]:shadow-[0_0_12px_rgba(59,130,246,0.5)]
-              [&::-moz-range-thumb]:hover:shadow-[0_0_16px_rgba(59,130,246,0.7)]
-              [&::-moz-range-thumb]:hover:scale-110
-              [&::-moz-range-thumb]:transition-all"
-          />
-        </div>
+        <Slider
+          label={s('playbackSpeed')}
+          value={settings.playbackSpeed}
+          onChange={handleSpeedChange}
+          min={0.05}
+          max={4}
+          step={0.05}
+          showValue={true}
+          unit="x"
+          valueFormatter={(val) => val.toFixed(2)}
+        />
 
         {/* Tool Position Display */}
         <div>

@@ -3,6 +3,7 @@
 import { ReactNode, useState, useRef, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useActiveTab } from '@/hooks/useActiveTab';
+import { useSettings } from '@/contexts/SettingsContext';
 import { CNCConstants, type TabType } from '@/lib/Constants';
 
 type TabName = TabType;
@@ -15,6 +16,7 @@ interface RibbonNavbarProps {
 export default function RibbonNavbar({ children }: RibbonNavbarProps) {
   const { activeTab, setActiveTab } = useActiveTab();
   const { tab } = useTranslation();
+  const { settings } = useSettings();
   const [showContent, setShowContent] = useState(false);
   const [tabPosition, setTabPosition] = useState({ left: 0, width: 0 });
   const [mounted, setMounted] = useState(false);
@@ -34,14 +36,26 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
     if (activeTab) setShowContent(true);
   }, [activeTab]);
 
-  // Update tab indicator position
+  // Update tab indicator position (recalculate on activeTab, mounted, or uiSize change)
   useEffect(() => {
     const tabElement = tabRefs.current[activeTab];
-    if (tabElement && mounted) {
-      const rect = tabElement.getBoundingClientRect();
-      setTabPosition({ left: rect.left, width: rect.width });
+    const navbarElement = navbarRef.current;
+    
+    if (tabElement && navbarElement && mounted) {
+      // Get current zoom level from body
+      const zoom = parseFloat(document.body.style.zoom || '1');
+      
+      // Get positions relative to navbar
+      const navbarRect = navbarElement.getBoundingClientRect();
+      const tabRect = tabElement.getBoundingClientRect();
+      
+      // Calculate relative position and adjust for zoom
+      const relativeLeft = (tabRect.left - navbarRect.left) / zoom;
+      const width = tabRect.width / zoom;
+      
+      setTabPosition({ left: relativeLeft, width });
     }
-  }, [activeTab, mounted]);
+  }, [activeTab, mounted, settings.uiSize]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

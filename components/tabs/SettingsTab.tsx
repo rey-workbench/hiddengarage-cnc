@@ -3,7 +3,7 @@
 import { useSettings } from '@/contexts/SettingsContext';
 import { useUI } from '@/contexts/UiContext';
 import { useSceneControls } from '@/hooks/useThreeScene';
-import { ColorMode, CameraView } from '@/lib/Constants';
+import { CameraView } from '@/lib/Constants';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useConfirmDialog } from '@/hooks/useConfirmDialog';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -15,7 +15,7 @@ interface SettingsTabProps {
 export default function SettingsTab({ sceneManager }: SettingsTabProps) {
   const { settings, updateSettings } = useSettings();
   const { resetPanelPositions } = useUI();
-  const { setCameraView, toggleGrid, toggleAxes } = useSceneControls(sceneManager);
+  const { setCameraView } = useSceneControls(sceneManager);
   const { common, settings: settingsTranslations } = useTranslation();
   const { dialogState, showConfirm, handleCancel, handleConfirm } = useConfirmDialog();
 
@@ -30,47 +30,6 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
           <input type="number" value={settings.arcSegments}
             onChange={(e) => updateSettings({ arcSegments: parseInt(e.target.value) })}
             min="4" max="256" className="input-base w-20" />
-        </div>
-      </div>
-      <div className="border-b border-dark-700 pb-4">
-        <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">{settingsTranslations('colorMode')}</h3>
-        <select value={settings.colorMode}
-          onChange={(e) => updateSettings({ colorMode: e.target.value as ColorMode })} className="input-base w-full">
-          <option value={ColorMode.Default}>{settingsTranslations('colorDefault')}</option>
-          <option value={ColorMode.Axis}>{settingsTranslations('colorAxis')}</option>
-          <option value={ColorMode.Progressive}>{settingsTranslations('colorProgressive')}</option>
-        </select>
-      </div>
-      <div className="border-b border-dark-700 pb-4">
-        <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">{settingsTranslations('displayOptions')}</h3>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={settings.showGrid}
-              onChange={(e) => { updateSettings({ showGrid: e.target.checked }); toggleGrid(e.target.checked); }}
-              className="w-4 h-4 accent-primary-500" />
-            <span className="text-sm text-dark-300">{settingsTranslations('showGrid')}</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={settings.showAxes}
-              onChange={(e) => { updateSettings({ showAxes: e.target.checked }); toggleAxes(e.target.checked); }}
-              className="w-4 h-4 accent-primary-500" />
-            <span className="text-sm text-dark-300">{settingsTranslations('showAxes')}</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={settings.showToolhead}
-              onChange={(e) => updateSettings({ showToolhead: e.target.checked })}
-              className="w-4 h-4 accent-primary-500" />
-            <span className="text-sm text-dark-300">{settingsTranslations('showToolhead')}</span>
-          </label>
-        </div>
-        <div className="mt-3 space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-dark-300">{settingsTranslations('toolheadSize')}</label>
-            <span className="text-xs text-primary-400 font-mono font-semibold">{settings.toolheadSize.toFixed(1)}x</span>
-          </div>
-          <input type="range" min="0.1" max="5" step="0.1" value={settings.toolheadSize}
-            onChange={(e) => updateSettings({ toolheadSize: parseFloat(e.target.value) })}
-            className="w-full h-1.5 bg-dark-700 rounded-lg appearance-none cursor-pointer accent-primary-500" />
         </div>
       </div>
       <div className="border-b border-dark-700 pb-4">

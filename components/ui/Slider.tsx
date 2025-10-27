@@ -1,9 +1,11 @@
 import { InputHTMLAttributes, forwardRef } from 'react';
 
-export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
   label?: string;
   showValue?: boolean;
   unit?: string;
+  valueFormatter?: (value: number) => string;
+  onChange?: (value: number) => void;
 }
 
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(
@@ -16,11 +18,24 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
       min = 0,
       max = 100,
       step = 1,
+      valueFormatter,
+      onChange,
       className = '',
       ...props
     },
     ref
   ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = parseFloat(e.target.value);
+      if (onChange) {
+        onChange(newValue);
+      }
+    };
+
+    const displayValue = valueFormatter && typeof value === 'number'
+      ? valueFormatter(value)
+      : value;
+
     return (
       <div className="space-y-1">
         {label && (
@@ -28,7 +43,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
             <label className="text-xs font-medium text-gray-300">{label}</label>
             {showValue && (
               <span className="text-[10px] text-primary-400 font-semibold">
-                {value}{unit}
+                {displayValue}{unit}
               </span>
             )}
           </div>
@@ -40,6 +55,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
           min={min}
           max={max}
           step={step}
+          onChange={handleChange}
           className={`
             w-full h-1.5 rounded-lg appearance-none cursor-pointer
             bg-gradient-to-r from-dark-800 to-dark-700
@@ -82,3 +98,5 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
 );
 
 Slider.displayName = 'Slider';
+
+export default Slider;

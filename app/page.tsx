@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { useActiveTab } from '@/hooks/useActiveTab';
+import { useUIScale } from '@/hooks/useUIScale';
 import PlaybackPanel from '@/components/panels/PlaybackPanel';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import StatusBar from '@/components/ui/StatusBar';
@@ -12,6 +13,7 @@ import RibbonNavbar from '@/components/ui/RibbonNavbar';
 // Lazy load components
 const GCodeTab = dynamic(() => import('@/components/tabs/GCodeTab'), { ssr: false });
 const ImageTab = dynamic(() => import('@/components/tabs/ImageTab'), { ssr: false });
+const ViewTab = dynamic(() => import('@/components/tabs/ViewTab'), { ssr: false });
 const SettingsTab = dynamic(() => import('@/components/tabs/SettingsTab'), { ssr: false });
 const StatisticsTab = dynamic(() => import('@/components/tabs/StatisticsTab'), { ssr: false });
 const LegendTab = dynamic(() => import('@/components/tabs/LegendTab'), { ssr: false });
@@ -20,6 +22,9 @@ const ThreeViewer = dynamic(() => import('@/components/viewer/ThreeViewer'), { s
 export default function Home() {
   const { sceneManagers, setSceneManagers } = useWorkspace();
   const { activeTab } = useActiveTab();
+  
+  // Apply UI scaling
+  useUIScale();
 
   const handleInitialized = useCallback((managers: any) => {
     setSceneManagers(managers);
@@ -32,6 +37,7 @@ export default function Home() {
     const props = {
       gcode: { pathRenderer: sceneManagers.pathRenderer, sceneManager: sceneManagers.sceneManager, toolhead: sceneManagers.toolhead },
       image: { onGCodeGenerated: () => {} },
+      view: { sceneManager: sceneManagers.sceneManager },
       settings: { sceneManager: sceneManagers.sceneManager },
       statistics: {},
       legend: {}
@@ -40,6 +46,7 @@ export default function Home() {
     const components = {
       gcode: GCodeTab,
       image: ImageTab,
+      view: ViewTab,
       settings: SettingsTab,
       statistics: StatisticsTab,
       legend: LegendTab
@@ -55,11 +62,13 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen flex flex-col">
+      {/* Navbar - not affected by zoom */}
       <RibbonNavbar sceneManagers={sceneManagers}>
         {renderTab()}
       </RibbonNavbar>
       
-      <div className="flex-1 relative" style={{ marginTop: 'var(--ribbon-height, 0px)' }}>
+      {/* Main content - affected by zoom */}
+      <div className="main-content flex-1 relative" style={{ marginTop: 'var(--ribbon-height, 0px)' }}>
         <ThreeViewer onInitialized={handleInitialized} />
         {sceneManagers && <PlaybackPanel playbackController={sceneManagers.playbackController} />}
         <StatusBar />

@@ -20,6 +20,7 @@ const defaultSettings: Settings = {
   showAxes: true,
   showToolhead: true,
   toolheadSize: CNCConstants.defaults.toolheadSize,
+  uiSize: 'medium',
   language: 'id',
 };
 

@@ -87,6 +87,8 @@ export interface SVGConversionOptions {
   safeZ: number;
 }
 
+export type UISize = 'small' | 'medium' | 'large';
+
 export interface Settings {
   playbackSpeed: number;
   arcSegments: number;
@@ -95,10 +97,11 @@ export interface Settings {
   showAxes: boolean;
   showToolhead: boolean;
   toolheadSize: number;
+  uiSize: UISize;
   language: 'en' | 'id';
 }
 
-export type TabType = 'gcode' | 'image' | 'settings' | 'statistics' | 'legend';
+export type TabType = 'gcode' | 'image' | 'view' | 'settings' | 'statistics' | 'legend';
 
 export interface PanelState {
   position: { x: number; y: number };
@@ -138,6 +141,7 @@ export const CNCConstants = {
   tabs: [
     { name: 'gcode' as const, icon: 'fas fa-code' },
     { name: 'image' as const, icon: 'fas fa-image' },
+    { name: 'view' as const, icon: 'fas fa-eye' },
     { name: 'settings' as const, icon: 'fas fa-cog' },
     { name: 'statistics' as const, icon: 'fas fa-chart-bar' },
     { name: 'legend' as const, icon: 'fas fa-palette' },

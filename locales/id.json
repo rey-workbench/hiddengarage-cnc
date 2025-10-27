@@ -7,6 +7,7 @@
   "tab": {
     "gcode": "G-Code",
     "image": "Gambar → G-Code",
+    "view": "Tampilan",
     "settings": "Pengaturan",
     "statistics": "Statistik",
     "legend": "Legenda"
@@ -93,32 +94,37 @@
     "gcodeGenerated": "G-Code berhasil di-generate! ({lines} baris) - Switch ke tab G-Code",
     "errorMessage": "Error: {error}"
   },
-  "settings": {
-    "simulation": "Pengaturan Simulasi",
-    "playbackSpeed": "Kecepatan Playback",
+  "view": {
+    "uiSize": "Ukuran UI",
+    "sizeSmall": "Kecil",
+    "sizeMedium": "Sedang",
+    "sizeLarge": "Besar",
     "colorMode": "Mode Warna",
     "colorDefault": "Default (tipe gerakan)",
     "colorAxis": "Axis (arah gerakan)",
     "colorProgressive": "Progressive (realtime)",
-    "progressiveModeDesc": "Mode Progressive: Semua garis awalnya putih, setelah dilewati toolhead berubah menjadi merah (straight G0/G1) atau hijau (arc G2/G3)",
+    "progressiveModeDesc": "Semua garis putih, berubah menjadi merah (straight G0/G1) atau hijau (arc G2/G3) saat dilewati toolhead",
     "displayOptions": "Opsi Tampilan",
     "showGrid": "Tampilkan Grid",
     "showAxes": "Tampilkan Sumbu",
     "showToolhead": "Tampilkan Toolhead",
     "toolheadSize": "Ukuran Toolhead",
-    "toolheadDesc": "Toolhead (kerucut merah) menunjukkan posisi tool saat simulasi",
+    "toolheadScale": "Skala Toolhead",
+    "toolheadDesc": "Kerucut merah menunjukkan posisi tool saat simulasi"
+  },
+  "settings": {
+    "simulation": "Pengaturan Simulasi",
+    "playbackSpeed": "Kecepatan Playback",
     "cameraPresets": "Preset Kamera",
     "viewTop": "Atas",
     "viewFront": "Depan",
     "viewSide": "Samping",
     "viewIso": "ISO",
-    "resetPanels": "Reset Posisi Panel",
     "language": "Bahasa / Language",
     "panelLayout": "Panel Layout",
     "resetPanelPositions": "Reset Posisi Panel",
     "resetPanelPositionsConfirm": "Reset posisi dan ukuran semua panel ke default?",
     "arcSegments": "Segmen Arc:"
-
   },
   "playback": {
     "title": "Playback",

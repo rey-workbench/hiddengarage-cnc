@@ -7,6 +7,7 @@
   "tab": {
     "gcode": "G-Code",
     "image": "Image → G-Code",
+    "view": "View",
     "settings": "Settings",
     "statistics": "Statistics",
     "legend": "Legend"
@@ -93,27 +94,33 @@
     "gcodeGenerated": "G-Code generated successfully! ({lines} lines) - Switching to G-Code tab",
     "errorMessage": "Error: {error}"
   },
-  "settings": {
-    "language": "Language",
-    "simulation": "Simulation Settings",
-    "playbackSpeed": "Playback Speed",
+  "view": {
+    "uiSize": "UI Size",
+    "sizeSmall": "Small",
+    "sizeMedium": "Medium",
+    "sizeLarge": "Large",
     "colorMode": "Color Mode",
     "colorDefault": "Default (movement type)",
     "colorAxis": "Axis (movement direction)",
     "colorProgressive": "Progressive (realtime)",
-    "progressiveModeDesc": "Progressive Mode: All lines start white, turn red (straight G0/G1) or green (arc G2/G3) after toolhead passes",
+    "progressiveModeDesc": "All lines are white, turn red (straight G0/G1) or green (arc G2/G3) as toolhead passes",
     "displayOptions": "Display Options",
     "showGrid": "Show Grid",
     "showAxes": "Show Axes",
     "showToolhead": "Show Toolhead",
     "toolheadSize": "Toolhead Size",
-    "toolheadDesc": "Toolhead (red cone) shows tool position during simulation",
+    "toolheadScale": "Toolhead Scale",
+    "toolheadDesc": "Red cone shows tool position during simulation"
+  },
+  "settings": {
+    "language": "Language",
+    "simulation": "Simulation Settings",
+    "playbackSpeed": "Playback Speed",
     "cameraPresets": "Camera Presets",
     "viewTop": "Top",
     "viewFront": "Front",
     "viewSide": "Side",
     "viewIso": "ISO",
-    "resetPanels": "Reset Panel Positions",
     "panelLayout": "Panel Layout",
     "resetPanelPositions": "Reset Panel Positions",
     "resetPanelPositionsConfirm": "Reset all panel positions and sizes to default?",
