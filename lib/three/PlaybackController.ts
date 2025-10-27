@@ -106,11 +106,11 @@ export class PlaybackController {
       // Segment complete
       this.toolhead.setPositionXYZ(to[0], to[1], to[2]);
       
+      // Update progressive trailing colors for the completed segment (before increment)
+      this.pathRenderer.updateProgressiveTrailing(this.currentSegmentIndex);
+      
       this.currentSegmentIndex++;
       this.segmentProgress = 0;
-      
-      // Update progressive trailing colors when segment changes
-      this.pathRenderer.updateProgressiveTrailing(this.currentSegmentIndex);
       
       if (this.currentSegmentIndex >= this.segments.length) {
         this.isPlaying = false;

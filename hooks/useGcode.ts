@@ -45,6 +45,9 @@ export function useGCode(
 
       pathRenderer.setSegments(result.segments);
       pathRenderer.buildVisuals();
+      
+      // Reset progressive trailing for new G-code (start all white)
+      pathRenderer.resetProgressiveTrailing();
 
       if (isFinite(result.bbox.minX)) {
         const objectSize = sceneManager.adjustCameraToFitBBox(result.bbox);

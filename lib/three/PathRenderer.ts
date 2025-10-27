@@ -24,6 +24,11 @@ export class PathRenderer {
   setColorMode(mode: ColorMode): void {
     this.colorMode = mode;
     this.rebuild();
+    
+    // Reset progressive trailing when switching to Progressive mode
+    if (mode === ColorMode.Progressive) {
+      this.resetProgressiveTrailing();
+    }
   }
 
   buildVisuals(): void {
