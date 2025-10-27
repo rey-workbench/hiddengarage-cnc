@@ -47,50 +47,72 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
       title={playback('title')}
       icon="fas fa-play-circle"
       initialPosition={uiState.playbackPanelState.position}
-      initialSize={uiState.playbackPanelState.size}
-      minSize={{ width: 280, height: 200 }}
-      maxSize={{ width: 500, height: 400 }}
+      initialSize={{ width: 280, height: 240 }}
+      minSize={{ width: 260, height: 220 }}
+      maxSize={{ width: 420, height: 340 }}
       isMinimized={uiState.playbackPanelState.isMinimized}
       onToggleMinimize={togglePlaybackMinimized}
       onPositionChange={(position) => updatePlaybackPanelState({ position })}
       onSizeChange={(size) => updatePlaybackPanelState({ size })}
       resizable={true}
     >
-      <div className="space-y-3">
-        <div className="flex gap-2">
+      <div className="space-y-2.5">
+        {/* Compact Button Group */}
+        <div className="flex gap-1.5">
           <button 
             onClick={handlePlay} 
             disabled={simulationState.isPlaying} 
-            className="btn btn-success flex-1 flex items-center justify-center gap-2"
+            className="flex-1 px-2 py-1.5 rounded-lg font-semibold text-xs transition-all duration-300 
+              bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500
+              text-white border border-green-700/50
+              shadow-[0_4px_12px_rgba(34,197,94,0.25)] hover:shadow-[0_6px_20px_rgba(34,197,94,0.4)]
+              hover:-translate-y-0.5 active:scale-95
+              disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+              flex items-center justify-center gap-2"
           >
             <i className="fas fa-play text-xs" />
-            <span className="text-sm">{playback('play')}</span>
+            <span>{playback('play')}</span>
           </button>
           <button 
             onClick={handlePause} 
             disabled={!simulationState.isPlaying} 
-            className="btn btn-warning flex-1 flex items-center justify-center gap-2"
+            className="flex-1 px-2 py-1.5 rounded-lg font-semibold text-xs transition-all duration-300
+              bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500
+              text-white border border-amber-700/50
+              shadow-[0_4px_12px_rgba(245,158,11,0.25)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.4)]
+              hover:-translate-y-0.5 active:scale-95
+              disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+              flex items-center justify-center gap-2"
           >
             <i className="fas fa-pause text-xs" />
-            <span className="text-sm">{playback('pause')}</span>
+            <span>{playback('pause')}</span>
           </button>
           <button 
             onClick={handleReset} 
-            className="btn btn-danger flex-1 flex items-center justify-center gap-2"
+            className="flex-1 px-2 py-1.5 rounded-lg font-semibold text-xs transition-all duration-300
+              bg-gradient-to-br from-red-500 to-red-600 hover:from-red-400 hover:to-red-500
+              text-white border border-red-700/50
+              shadow-[0_4px_12px_rgba(239,68,68,0.25)] hover:shadow-[0_6px_20px_rgba(239,68,68,0.4)]
+              hover:-translate-y-0.5 active:scale-95
+              flex items-center justify-center gap-2"
           >
             <i className="fas fa-stop text-xs" />
-            <span className="text-sm">{playback('reset')}</span>
+            <span>{playback('reset')}</span>
           </button>
         </div>
 
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-semibold text-dark-400 uppercase tracking-wider">
+        {/* Speed Slider */}
+        <div className="relative">
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-xs font-bold text-dark-300 uppercase tracking-wider">
               {s('playbackSpeed')}
             </label>
-            <span className="text-xs text-primary-400 font-mono font-semibold">
-              {settings.playbackSpeed.toFixed(2)}x
-            </span>
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary-500/20 rounded blur-sm" />
+              <span className="text-xs text-primary-300 font-mono font-bold relative px-2 py-0.5 bg-primary-500/10 rounded border border-primary-500/30">
+                {settings.playbackSpeed.toFixed(2)}x
+              </span>
+            </div>
           </div>
           <input 
             type="range" 
@@ -99,18 +121,81 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
             step="0.05" 
             value={settings.playbackSpeed}
             onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-dark-700 rounded-lg appearance-none cursor-pointer accent-primary-500" 
+            className="w-full h-2 rounded-lg appearance-none cursor-pointer
+              bg-gradient-to-r from-dark-800 to-dark-700
+              shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]
+              border border-dark-600/50
+              [&::-webkit-slider-thumb]:appearance-none
+              [&::-webkit-slider-thumb]:w-5
+              [&::-webkit-slider-thumb]:h-5
+              [&::-webkit-slider-thumb]:rounded-full
+              [&::-webkit-slider-thumb]:bg-gradient-to-br
+              [&::-webkit-slider-thumb]:from-primary-400
+              [&::-webkit-slider-thumb]:to-primary-600
+              [&::-webkit-slider-thumb]:border-2
+              [&::-webkit-slider-thumb]:border-primary-300/50
+              [&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(59,130,246,0.5)]
+              [&::-webkit-slider-thumb]:hover:shadow-[0_0_16px_rgba(59,130,246,0.7)]
+              [&::-webkit-slider-thumb]:hover:scale-110
+              [&::-webkit-slider-thumb]:transition-all
+              [&::-webkit-slider-thumb]:duration-300
+              [&::-moz-range-thumb]:w-5
+              [&::-moz-range-thumb]:h-5
+              [&::-moz-range-thumb]:rounded-full
+              [&::-moz-range-thumb]:bg-gradient-to-br
+              [&::-moz-range-thumb]:from-primary-400
+              [&::-moz-range-thumb]:to-primary-600
+              [&::-moz-range-thumb]:border-2
+              [&::-moz-range-thumb]:border-primary-300/50
+              [&::-moz-range-thumb]:shadow-[0_0_12px_rgba(59,130,246,0.5)]
+              [&::-moz-range-thumb]:hover:shadow-[0_0_16px_rgba(59,130,246,0.7)]
+              [&::-moz-range-thumb]:hover:scale-110
+              [&::-moz-range-thumb]:transition-all"
           />
         </div>
 
+        {/* Tool Position Display */}
         <div>
-          <h4 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-2">
+          <h4 className="text-[10px] font-bold text-dark-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+            <i className="fas fa-crosshairs text-primary-400 text-[10px]" />
             {playback('toolPosition')}
           </h4>
-          <div className="bg-dark-800/60 rounded-lg p-2.5 font-mono text-xs text-gray-100 leading-relaxed">
-            <div>X: {toolPosition.x.toFixed(3)} | Y: {toolPosition.y.toFixed(3)} | Z: {toolPosition.z.toFixed(3)}</div>
-            <div className="mt-1">
-              Feed: {toolPosition.feed > 0 ? `${toolPosition.feed} mm/min` : '-'} | Spindle: {toolPosition.spindle}
+          <div className="relative bg-gradient-to-br from-dark-800/70 to-dark-900/60 rounded-lg p-2 border border-dark-700/60 
+            shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] overflow-hidden">
+            {/* Subtle glow effect */}
+            <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-primary-500/5 to-transparent pointer-events-none" />
+            
+            {/* Position values */}
+            <div className="relative space-y-1">
+              <div className="flex items-center gap-2 font-mono text-[10px]">
+                <span className="text-red-400 font-bold min-w-[16px]">X:</span>
+                <span className="text-gray-100 font-semibold tabular-nums">{toolPosition.x.toFixed(3)}</span>
+                <span className="text-green-400 font-bold min-w-[16px]">Y:</span>
+                <span className="text-gray-100 font-semibold tabular-nums">{toolPosition.y.toFixed(3)}</span>
+                <span className="text-blue-400 font-bold min-w-[16px]">Z:</span>
+                <span className="text-gray-100 font-semibold tabular-nums">{toolPosition.z.toFixed(3)}</span>
+              </div>
+              
+              {/* Separator */}
+              <div className="h-px bg-gradient-to-r from-transparent via-dark-600 to-transparent" />
+              
+              {/* Feed and Spindle */}
+              <div className="flex items-center gap-3 font-mono text-[10px]">
+                <div className="flex items-center gap-1">
+                  <i className="fas fa-tachometer-alt text-amber-400 text-[9px]" />
+                  <span className="text-dark-400">Feed:</span>
+                  <span className="text-gray-100 font-semibold">
+                    {toolPosition.feed > 0 ? `${toolPosition.feed} mm/min` : '-'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <i className="fas fa-cog text-primary-400 text-[9px]" />
+                  <span className="text-dark-400">Spindle:</span>
+                  <span className={`font-semibold ${toolPosition.spindle === 'ON' ? 'text-green-400' : 'text-gray-500'}`}>
+                    {toolPosition.spindle}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -88,40 +88,40 @@ export default function ConfirmDialog({
       />
       
       {/* Dialog */}
-      <div className="relative w-full max-w-md mx-4 animate-[dialogSlideIn_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">
-        <div className="relative bg-gradient-to-br from-dark-800/98 to-dark-900/98 backdrop-blur-xl rounded-2xl border border-dark-600/50 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-sm mx-4 animate-[dialogSlideIn_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">
+        <div className="relative bg-gradient-to-br from-dark-800/98 to-dark-900/98 backdrop-blur-xl rounded-xl border border-dark-600/50 shadow-2xl overflow-hidden">
           {/* Animated gradient border effect */}
-          <div className="absolute inset-0 rounded-2xl opacity-50">
+          <div className="absolute inset-0 rounded-xl opacity-50">
             <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 via-primary-500/20 to-primary-500/0 animate-pulse" />
           </div>
 
-          <div className="relative p-6 space-y-5">
+          <div className="relative p-4 space-y-3">
             {/* Icon */}
             <div className="flex justify-center">
               <div className="relative">
                 {/* Pulse animation background */}
                 <div className={`absolute inset-0 ${config.pulseColor} rounded-full animate-ping opacity-75`} />
-                <div className={`relative w-20 h-20 ${config.bgColor} ${config.borderColor} border-2 rounded-full flex items-center justify-center`}>
-                  <i className={`${config.iconClass} ${config.iconColor} text-4xl`} />
+                <div className={`relative w-16 h-16 ${config.bgColor} ${config.borderColor} border-2 rounded-full flex items-center justify-center`}>
+                  <i className={`${config.iconClass} ${config.iconColor} text-3xl`} />
                 </div>
               </div>
             </div>
 
             {/* Title */}
             <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-100 mb-2">
+              <h3 className="text-base font-bold text-gray-100 mb-1.5">
                 {title}
               </h3>
-              <p className="text-sm text-dark-300 leading-relaxed">
+              <p className="text-xs text-dark-300 leading-relaxed">
                 {message}
               </p>
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-3 pt-2">
+            <div className="flex gap-2 pt-1">
               <button
                 onClick={onCancel}
-                className="flex-1 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200
+                className="flex-1 px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-200
                   bg-gradient-to-br from-dark-700 to-dark-800 border border-dark-600
                   hover:from-dark-600 hover:to-dark-700 hover:border-dark-500
                   hover:-translate-y-0.5 hover:shadow-lg
@@ -131,7 +131,7 @@ export default function ConfirmDialog({
               </button>
               <button
                 onClick={onConfirm}
-                className="flex-1 px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200
+                className="flex-1 px-3 py-1.5 rounded-lg font-semibold text-xs transition-all duration-200
                   bg-gradient-to-br from-primary-500 to-primary-600 border border-primary-700
                   hover:from-primary-400 hover:to-primary-500 hover:border-primary-600
                   hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary-500/30

@@ -19,6 +19,7 @@
   body {
     @apply bg-dark-950 text-gray-200;
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><defs><radialGradient id="c1"><stop offset="0%25" style="stop-color:%2360a5fa;stop-opacity:1"/><stop offset="100%25" style="stop-color:%233b82f6;stop-opacity:1"/></radialGradient></defs><path d="M2 2 L2 14 L8 9 L2 2 Z" fill="%23f1f5f9" stroke="%233b82f6" stroke-width="0.8"/><path d="M3 3.5 L3 12 L7 8.5 Z" fill="url(%23c1)" opacity="0.4"/></svg>') 2 2, auto;
   }
 }
 
@@ -82,14 +83,14 @@
   }
 
   .panel-header {
-    @apply flex items-center justify-between p-3.5;
+    @apply flex items-center justify-between p-2.5;
     background: linear-gradient(to right, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.6), rgba(30, 41, 59, 0.8));
     border-bottom: 1px solid rgba(51, 65, 85, 0.7);
     @apply rounded-t-xl backdrop-blur-sm;
   }
 
   .panel-header-btn {
-    @apply w-8 h-8 flex items-center justify-center rounded-lg;
+    @apply w-6 h-6 flex items-center justify-center rounded-lg;
     background-color: rgba(51, 65, 85, 0.4);
     border: 1px solid rgba(51, 65, 85, 0.5);
     @apply text-dark-300 hover:text-gray-100;
@@ -101,7 +102,7 @@
   }
 
   .panel-content {
-    @apply overflow-y-auto overflow-x-hidden p-4;
+    @apply overflow-y-auto overflow-x-hidden p-3;
     @apply scrollbar-thin;
   }
 
@@ -134,58 +135,150 @@
     @apply rounded-br;
   }
 
-  /* Ribbon Navbar Styles */
+  /* Ribbon Navbar Styles - Enhanced */
   .ribbon-navbar {
     @apply fixed top-0 left-0 right-0;
     z-index: 40;
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
-    @apply backdrop-blur-xl;
-    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to bottom, 
+      rgba(15, 23, 42, 0.98), 
+      rgba(15, 23, 42, 0.96),
+      rgba(8, 11, 22, 0.98)
+    );
+    @apply backdrop-blur-2xl;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(59, 130, 246, 0.05) inset,
+      0 1px 0 0 rgba(255, 255, 255, 0.03) inset;
     position: relative;
   }
 
   .ribbon-titlebar {
-    @apply flex items-center justify-between px-4 py-2;
-    background: linear-gradient(to bottom, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
-    border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+    @apply flex items-center justify-between px-4 py-1.5;
+    background: linear-gradient(135deg, 
+      rgba(30, 41, 59, 0.7), 
+      rgba(15, 23, 42, 0.85),
+      rgba(30, 41, 59, 0.7)
+    );
+    border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+    position: relative;
+  }
+
+  .ribbon-titlebar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, 
+      transparent, 
+      rgba(59, 130, 246, 0.2) 20%,
+      rgba(59, 130, 246, 0.2) 80%,
+      transparent
+    );
   }
 
   .ribbon-collapse-btn {
-    @apply w-7 h-7 flex items-center justify-center rounded;
-    background-color: rgba(51, 65, 85, 0.4);
+    @apply w-8 h-8 flex items-center justify-center rounded-lg;
+    background: linear-gradient(135deg, 
+      rgba(51, 65, 85, 0.5), 
+      rgba(51, 65, 85, 0.3)
+    );
+    border: 1px solid rgba(71, 85, 105, 0.4);
     @apply text-dark-300 hover:text-gray-100;
-    @apply transition-all duration-200;
+    @apply transition-all duration-300;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   .ribbon-collapse-btn:hover {
-    background-color: rgba(71, 85, 105, 0.6);
+    background: linear-gradient(135deg, 
+      rgba(71, 85, 105, 0.7), 
+      rgba(71, 85, 105, 0.5)
+    );
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  }
+
+  .ribbon-collapse-btn:active {
+    transform: translateY(0);
   }
 
   .ribbon-tabs {
-    @apply flex items-center gap-1 px-3;
-    background: linear-gradient(to bottom, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6));
+    @apply flex items-center gap-0.5 px-3 py-0.5;
+    background: linear-gradient(to bottom, 
+      rgba(30, 41, 59, 0.5), 
+      rgba(15, 23, 42, 0.7)
+    );
+    position: relative;
+  }
+
+  .ribbon-tabs::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right,
+      transparent,
+      rgba(255, 255, 255, 0.03) 30%,
+      rgba(255, 255, 255, 0.03) 70%,
+      transparent
+    );
   }
 
   .ribbon-tab {
-    @apply flex items-center gap-2 px-4 py-2;
-    @apply text-sm font-medium text-dark-300;
-    @apply transition-all duration-150;
-    @apply no-underline;
-    border-bottom: 2px solid transparent;
-    @apply hover:text-gray-100;
+    @apply flex items-center gap-1.5 px-3 py-1.5;
+    @apply text-xs text-dark-300;
+    @apply transition-all duration-300;
+    @apply no-underline relative;
     background: transparent;
-    will-change: transform, background-color;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    will-change: transform, background-color, color;
+  }
+
+  .ribbon-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px 8px 0 0;
+    background: transparent;
+    transition: all 0.3s ease;
+    z-index: -1;
+  }
+
+  .ribbon-tab:hover::before {
+    background: linear-gradient(to bottom,
+      rgba(51, 65, 85, 0.4),
+      rgba(51, 65, 85, 0.2)
+    );
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .ribbon-tab:hover {
-    background: rgba(51, 65, 85, 0.3);
+    @apply text-gray-100;
+    transform: translateY(-1px);
   }
 
   .ribbon-tab.active {
-    @apply text-primary-400;
-    border-bottom-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.1);
+    @apply text-primary-300;
+  }
+
+  .ribbon-tab.active::before {
+    background: linear-gradient(to bottom,
+      rgba(59, 130, 246, 0.12),
+      rgba(59, 130, 246, 0.08)
+    );
+    box-shadow: 
+      0 -2px 12px rgba(59, 130, 246, 0.15),
+      0 0 0 1px rgba(59, 130, 246, 0.2) inset;
+  }
+
+  .ribbon-tab.active:hover {
+    transform: translateY(-2px);
   }
 
   .ribbon-content-dropdown {
@@ -193,20 +286,42 @@
     top: 100%;
     z-index: 45;
     margin-top: 0;
-    animation: ribbonSlideDown 0.15s ease-out;
-    will-change: transform;
+    animation: ribbonSlideDown 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, opacity;
     contain: layout style paint;
   }
 
   .ribbon-content-dropdown-inner {
-    @apply mt-2 px-5 py-4;
-    width: 480px;
+    @apply mt-3 px-6 py-5;
+    width: 500px;
     max-height: 70vh;
     @apply overflow-y-auto scrollbar-thin;
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
-    @apply backdrop-blur-xl rounded-lg;
-    border: 1px solid rgba(51, 65, 85, 0.5);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to bottom, 
+      rgba(15, 23, 42, 0.98), 
+      rgba(15, 23, 42, 0.96),
+      rgba(8, 11, 22, 0.98)
+    );
+    @apply backdrop-blur-2xl rounded-xl;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 
+      0 12px 48px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(59, 130, 246, 0.08) inset,
+      0 2px 0 0 rgba(255, 255, 255, 0.03) inset;
+    position: relative;
+  }
+
+  .ribbon-content-dropdown-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: radial-gradient(ellipse at top, 
+      rgba(59, 130, 246, 0.08) 0%, 
+      transparent 60%
+    );
+    pointer-events: none;
   }
 
   .ribbon-tab-content {
@@ -216,11 +331,11 @@
   @keyframes ribbonSlideDown {
     from {
       opacity: 0;
-      transform: translateY(-8px);
+      transform: translateY(-12px) scale(0.98);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
 
@@ -271,6 +386,27 @@
 }
 
 @layer utilities {
+  /* Custom Cursor Styles - Clean & Professional */
+  a, button, .cursor-pointer, [role="button"] {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 2 L2 15 L9 9.5 L2 2 Z" fill="%23f1f5f9" stroke="%233b82f6" stroke-width="1"/><path d="M3 3.5 L3 13 L8 9 Z" fill="%2360a5fa" opacity="0.5"/></svg>') 2 2, pointer !important;
+  }
+
+  input[type="text"], input[type="number"], input[type="range"], textarea, select {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 2 L2 14 L8 9 L2 2 Z" fill="%23f1f5f9" stroke="%2310b981" stroke-width="0.8"/><path d="M3 3.5 L3 12 L7 8.5 Z" fill="%2334d399" opacity="0.4"/></svg>') 2 2, text !important;
+  }
+
+  .panel-header, [style*="cursor: grab"] {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 2 L2 15 L9 9.5 L2 2 Z" fill="%23f1f5f9" stroke="%23f59e0b" stroke-width="1"/><path d="M3 3.5 L3 13 L8 9 Z" fill="%23fbbf24" opacity="0.5"/></svg>') 2 2, grab !important;
+  }
+
+  .panel-header:active, [style*="cursor: grabbing"] {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 2 L2 15 L9 9.5 L2 2 Z" fill="%23f1f5f9" stroke="%23d97706" stroke-width="1.2"/><path d="M3 3.5 L3 13 L8 9 Z" fill="%23f59e0b" opacity="0.6"/></svg>') 2 2, grabbing !important;
+  }
+
+  .resize-handle {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 2 L2 15 L9 9.5 L2 2 Z" fill="%23f1f5f9" stroke="%236366f1" stroke-width="1"/><path d="M3 3.5 L3 13 L8 9 Z" fill="%238b5cf6" opacity="0.5"/></svg>') 2 2, nwse-resize !important;
+  }
+
   .scrollbar-thin::-webkit-scrollbar {
     @apply w-1.5;
   }

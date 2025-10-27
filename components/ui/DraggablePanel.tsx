@@ -165,22 +165,25 @@ export default function DraggablePanel({
     >
       <div className={`panel-desktop ${isDragging ? 'dragging' : ''} ${isResizing ? 'resizing' : ''}`}>
         <div
-          className="panel-header select-none"
+          className="panel-header select-none group"
           onMouseDown={handleMouseDown}
           style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
         >
           <div className="flex items-center gap-2">
-            <i className="fas fa-grip-vertical text-dark-500 text-xs" />
-            <i className={`${icon} text-primary-400 text-sm`} />
-            <h3 className="text-sm font-semibold text-gray-100">{title}</h3>
+            <i className="fas fa-grip-vertical text-dark-500 text-[10px] group-hover:text-dark-400 transition-colors duration-200" />
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary-500/20 rounded blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <i className={`${icon} text-primary-400 text-xs relative`} />
+            </div>
+            <h3 className="text-xs font-bold text-gray-100 tracking-tight">{title}</h3>
           </div>
           <div className="flex items-center gap-1 no-drag">
             <button
               onClick={onToggleMinimize}
-              className="panel-header-btn"
+              className="panel-header-btn transition-all duration-200 hover:scale-105"
               title={isMinimized ? 'Maximize' : 'Minimize'}
             >
-              <i className={`fas ${isMinimized ? 'fa-plus' : 'fa-minus'} text-xs`} />
+              <i className={`fas ${isMinimized ? 'fa-plus' : 'fa-minus'} text-[10px]`} />
             </button>
           </div>
         </div>

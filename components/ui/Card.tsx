@@ -15,21 +15,41 @@ export function Card({
 }: CardProps) {
   const paddings = {
     none: '',
-    sm: 'p-3',
-    md: 'p-4',
-    lg: 'p-6',
+    sm: 'p-2',
+    md: 'p-3',
+    lg: 'p-4',
   };
 
   const variants = {
-    default: 'bg-dark-800/60 border border-dark-700',
-    glass: 'bg-dark-800/40 backdrop-blur-sm border border-dark-700/50',
-    bordered: 'bg-transparent border-2 border-dark-700',
+    default: `
+      bg-gradient-to-br from-dark-800/70 to-dark-900/60 
+      border border-dark-700/60
+      shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)]
+      hover:border-dark-600/70
+      transition-all duration-300
+    `,
+    glass: `
+      bg-gradient-to-br from-dark-800/50 to-dark-900/40 
+      backdrop-blur-xl 
+      border border-dark-700/40
+      shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_1px_rgba(255,255,255,0.03)]
+      hover:border-dark-600/60
+      transition-all duration-300
+    `,
+    bordered: `
+      bg-transparent 
+      border-2 border-dark-700/70
+      shadow-[inset_0_0_0_1px_rgba(59,130,246,0.05)]
+      hover:border-dark-600/90
+      hover:shadow-[inset_0_0_0_1px_rgba(59,130,246,0.1)]
+      transition-all duration-300
+    `,
   };
 
   return (
     <div
       className={`
-        rounded-lg
+        rounded-xl relative
         ${variants[variant]}
         ${paddings[padding]}
         ${className}
@@ -56,16 +76,19 @@ export function CardHeader({
 }: CardHeaderProps) {
   return (
     <div
-      className={`flex items-center justify-between mb-4 ${className}`}
+      className={`flex items-center justify-between mb-3 pb-2 border-b border-dark-700/50 relative ${className}`}
       {...props}
     >
+      {/* Bottom glow */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/20 to-transparent" />
+      
       <div>
-        <h3 className="text-sm font-semibold text-gray-100">{title}</h3>
+        <h3 className="text-xs font-bold text-gray-100 tracking-tight">{title}</h3>
         {subtitle && (
-          <p className="text-xs text-dark-400 mt-0.5">{subtitle}</p>
+          <p className="text-[10px] text-dark-400 mt-0.5 font-medium">{subtitle}</p>
         )}
       </div>
-      {action && <div>{action}</div>}
+      {action && <div className="relative z-10">{action}</div>}
     </div>
   );
 }
