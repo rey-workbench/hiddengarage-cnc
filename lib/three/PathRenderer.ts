@@ -125,15 +125,16 @@ export class PathRenderer {
 
     this.currentSegmentIndex = currentSegmentIndex;
 
-    // Update colors for segments that have been visited by toolhead
+    // Update colors for segments as toolhead passes through them
     const colors = this.colorAttribute.array as Float32Array;
     
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i];
       let color: THREE.Color;
       
-      if (i < currentSegmentIndex) {
-        // Visited segments: color based on movement type (permanent)
+      // Color segments that have been reached by toolhead (including current segment)
+      if (i <= currentSegmentIndex) {
+        // Active and completed segments: color based on movement type
         if (segment.type === SegmentType.ArcCW || segment.type === SegmentType.ArcCCW) {
           color = new THREE.Color(CNCConstants.colors.arcCut); // Green for arcs
         } else if (segment.type === SegmentType.Linear || segment.type === SegmentType.Rapid) {
@@ -142,7 +143,7 @@ export class PathRenderer {
           color = new THREE.Color(0xffffff); // White for others
         }
       } else {
-        // Not yet visited: white
+        // Not yet reached: white
         color = new THREE.Color(0xffffff);
       }
 
