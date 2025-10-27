@@ -8,10 +8,9 @@ import { ColorMode, CameraView } from '@/types';
 
 interface SettingsTabProps {
   sceneManager: any;
-  onSpeedChange: (speed: number) => void;
 }
 
-export default function SettingsTab({ sceneManager, onSpeedChange }: SettingsTabProps) {
+export default function SettingsTab({ sceneManager }: SettingsTabProps) {
   const { settings, updateSettings } = useSettings();
   const { resetPanelPositions } = useUI();
   const { setCameraView, toggleGrid, toggleAxes } = useSceneControls(sceneManager);
@@ -23,18 +22,7 @@ export default function SettingsTab({ sceneManager, onSpeedChange }: SettingsTab
         <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">
           {t.settings.simulation}
         </h3>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-dark-300">{t.settings.playbackSpeed}</label>
-            <span className="text-xs text-primary-400 font-mono font-semibold">
-              {settings.playbackSpeed.toFixed(2)}x
-            </span>
-          </div>
-          <input type="range" min="0.05" max="4" step="0.05" value={settings.playbackSpeed}
-            onChange={(e) => { const speed = parseFloat(e.target.value); updateSettings({ playbackSpeed: speed }); onSpeedChange(speed); }}
-            className="w-full h-1.5 bg-dark-700 rounded-lg appearance-none cursor-pointer accent-primary-500" />
-        </div>
-        <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center justify-between">
           <label className="text-sm text-dark-300">{t.gcode.arcSegments}</label>
           <input type="number" value={settings.arcSegments}
             onChange={(e) => updateSettings({ arcSegments: parseInt(e.target.value) })}

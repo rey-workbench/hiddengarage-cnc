@@ -5,14 +5,18 @@ import { useState, useEffect } from 'react';
 
 export default function StatusBar() {
   const { uiState } = useUI();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [currentMessage, setCurrentMessage] = useState('');
 
   useEffect(() => {
-    if (uiState.statusType !== 'idle') {
+    if (uiState.statusType !== 'idle' && uiState.statusMessage) {
+      setCurrentMessage(uiState.statusMessage);
       setIsVisible(true);
+      
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 5000);
+      
       return () => clearTimeout(timer);
     }
   }, [uiState.statusMessage, uiState.statusType]);
@@ -37,11 +41,11 @@ export default function StatusBar() {
     }
   };
 
-  if (!isVisible || uiState.statusType === 'idle') return null;
+  if (!isVisible) return null;
 
   return (
     <div 
-      className={`fixed top-20 right-5 z-40 notification-toast ${getStatusColor()}`}
+      className={`fixed top-20 right-5 z-[100] notification-toast ${getStatusColor()}`}
       style={{ 
         animation: 'slideInRight 0.3s ease-out',
         maxWidth: '350px'
@@ -51,7 +55,7 @@ export default function StatusBar() {
         <i className={`fas ${getStatusIcon()} text-sm mt-0.5`} />
         <div className="flex-1">
           <span className="text-sm font-medium block">
-            {uiState.statusMessage}
+            {currentMessage}
           </span>
         </div>
         <button

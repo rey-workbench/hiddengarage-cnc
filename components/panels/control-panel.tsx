@@ -21,12 +21,6 @@ interface ControlPanelProps {
 export default function ControlPanel({ sceneManagers, onGCodeGenerated }: ControlPanelProps) {
   const { uiState } = useUI();
 
-  const handleSpeedChange = (speed: number) => {
-    if (sceneManagers?.playbackController) {
-      sceneManagers.playbackController.setSpeed(speed);
-    }
-  };
-
   return (
     <RibbonNavbar>
       <div className="ribbon-tab-content">
@@ -43,7 +37,6 @@ export default function ControlPanel({ sceneManagers, onGCodeGenerated }: Contro
         {uiState.activeTab === 'settings' && sceneManagers && (
           <SettingsTab
             sceneManager={sceneManagers.sceneManager}
-            onSpeedChange={handleSpeedChange}
           />
         )}
         {uiState.activeTab === 'statistics' && <StatisticsTab />}

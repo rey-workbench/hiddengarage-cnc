@@ -13,9 +13,10 @@ interface RibbonNavbarProps {
 export default function RibbonNavbar({ children }: RibbonNavbarProps) {
   const { uiState, setActiveTab } = useUI();
   const { settings } = useSettings();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const [tabPosition, setTabPosition] = useState({ left: 0, width: 0 });
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const navbarRef = useRef<HTMLDivElement>(null);
   const t = TRANSLATIONS[settings.language];
 
   const tabs: { id: TabType; label: string; icon: string }[] = [
@@ -36,8 +37,21 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
     }
   }, [uiState.activeTab]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
+        setShowContent(false);
+      }
+    };
+
+    if (showContent) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showContent]);
+
   return (
-    <div className="ribbon-navbar">
+    <div className="ribbon-navbar" ref={navbarRef}>
       {/* Title Bar */}
       <div className="ribbon-titlebar">
         <div className="flex items-center gap-3">
@@ -48,13 +62,6 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
           <div className="text-xs text-dark-400">|</div>
           <div className="text-xs text-dark-400">G-Code Visualizer & SVG Converter</div>
         </div>
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="ribbon-collapse-btn"
-          title={isCollapsed ? 'Expand Ribbon' : 'Collapse Ribbon'}
-        >
-          <i className={`fas fa-chevron-${isCollapsed ? 'down' : 'up'} text-xs`} />
-        </button>
       </div>
 
       {/* Ribbon Tabs */}
@@ -64,8 +71,12 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
             key={tab.id}
             ref={(el) => { tabRefs.current[tab.id] = el; }}
             onClick={() => {
-              setActiveTab(tab.id);
-              if (isCollapsed) setIsCollapsed(false);
+              if (uiState.activeTab === tab.id) {
+                setShowContent(!showContent);
+              } else {
+                setActiveTab(tab.id);
+                setShowContent(true);
+              }
             }}
             className={`ribbon-tab ${uiState.activeTab === tab.id ? 'active' : ''}`}
           >
@@ -76,7 +87,7 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
       </div>
 
       {/* Ribbon Content Dropdown */}
-      {!isCollapsed && uiState.activeTab && (
+      {showContent && uiState.activeTab && (
         <div 
           className="ribbon-content-dropdown"
           style={{
