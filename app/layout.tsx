@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import './globals.css';
 import { SimulationProvider } from '@/contexts/SimulationContext';
 import { SettingsProvider } from '@/contexts/SettingsContext';
@@ -13,13 +15,16 @@ export const metadata: Metadata = {
   description: 'Professional CNC G-Code parser and 3D visualization tool with Image to G-Code conversion (Fusion 360 style)',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <link
           rel="stylesheet"
@@ -27,15 +32,17 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <SettingsProvider>
-          <UIProvider>
-            <WorkspaceProvider>
-              <SimulationProvider>
-                {children}
-              </SimulationProvider>
-            </WorkspaceProvider>
-          </UIProvider>
-        </SettingsProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <SettingsProvider>
+            <UIProvider>
+              <WorkspaceProvider>
+                <SimulationProvider>
+                  {children}
+                </SimulationProvider>
+              </WorkspaceProvider>
+            </UIProvider>
+          </SettingsProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

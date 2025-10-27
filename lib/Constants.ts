@@ -1,3 +1,4 @@
+// CNC Constants - Configuration values
 export const CNCConstants = {
   DEFAULTS: {
     FEED_RATE: 600,
@@ -31,6 +32,9 @@ export const CNCConstants = {
   },
 };
 
+// DEPRECATED: TRANSLATIONS moved to locales/en.json and locales/id.json
+// Use next-intl useTranslations() hook instead
+// This object kept temporarily for backward compatibility during migration
 export const TRANSLATIONS = {
   en: {
     tab: {

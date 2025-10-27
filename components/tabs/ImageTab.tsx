@@ -3,7 +3,7 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useUI } from '@/contexts/UiContext';
-import { TRANSLATIONS } from '@/lib/Constants';
+import { useTranslations } from 'next-intl';
 
 interface ImageTabProps {
   onGCodeGenerated: (gcode: string) => void;
@@ -67,7 +67,7 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     stepover: 50,
   });
 
-  const t = TRANSLATIONS[settings.language];
+  const t = useTranslations();
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

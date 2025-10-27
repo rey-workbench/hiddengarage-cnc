@@ -4,10 +4,11 @@ import { useCallback } from 'react';
 import { useSimulation } from '@/contexts/SimulationContext';
 import { useUI } from '@/contexts/UiContext';
 import { useSettings } from '@/contexts/SettingsContext';
-import { TRANSLATIONS, CNCConstants } from '@/lib/Constants';
+import { CNCConstants } from '@/lib/Constants';
 import type { PathRenderer } from '@/lib/three/PathRenderer';
 import type { SceneManager } from '@/lib/three/SceneManager';
 import type { Toolhead } from '@/lib/three/Toolhead';
+import { useTranslations } from 'next-intl';
 
 export function useGCode(
   pathRenderer: PathRenderer | null,
@@ -18,7 +19,7 @@ export function useGCode(
   const { showSuccess, showWarning, showError, setLoading } = useUI();
   const { settings } = useSettings();
 
-  const t = TRANSLATIONS[settings.language];
+  const t = useTranslations();
 
   const handleParseGCode = useCallback(async (gcodeText: string) => {
     if (!pathRenderer || !sceneManager || !toolhead) {
@@ -32,13 +33,13 @@ export function useGCode(
     }
 
     try {
-      setLoading(true, t.status.parsing);
+      setLoading(true, t('status.parsing'));
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const result = parseGCode(gcodeText, { arcSegments: settings.arcSegments });
 
-      setLoading(true, t.status.rendering);
+      setLoading(true, t('status.rendering'));
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -66,18 +67,18 @@ export function useGCode(
 
       if (bboxSize > CNCConstants.DEFAULTS.TOOLHEAD_AUTO_HIDE_SIZE) {
         showWarning(
-          `${t.msg.objectLarge} (${(bboxSize / 1000).toFixed(1)}m) ${t.msg.useSmallScale}`
+          `${t('msg.objectLarge')} (${(bboxSize / 1000).toFixed(1)}m) ${t('msg.useSmallScale')}`
         );
       } else if (result.segments.length > CNCConstants.DEFAULTS.VERY_LARGE_FILE_WARNING) {
         showError(
-          `${t.msg.veryLargeFile} ${result.segments.length} ${t.msg.segments} ${t.msg.reduceSegments}`
+          `${t('msg.veryLargeFile')} ${result.segments.length} ${t('msg.segments')} ${t('msg.reduceSegments')}`
         );
       } else if (result.segments.length > CNCConstants.DEFAULTS.LARGE_FILE_WARNING) {
         showWarning(
-          `${t.msg.largeFile} ${result.segments.length} ${t.msg.segments} ${t.msg.renderingSlow}`
+          `${t('msg.largeFile')} ${result.segments.length} ${t('msg.segments')} ${t('msg.renderingSlow') as string}`
         );
       } else {
-        showSuccess(`${t.msg.gcodeSuccess} ${result.segments.length} ${t.msg.segments}`);
+        showSuccess(`${t('msg.gcodeSuccess')} ${result.segments.length} ${t('msg.segments')}`);
       }
 
       return result;

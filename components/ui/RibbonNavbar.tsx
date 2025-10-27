@@ -3,8 +3,7 @@
 import { ReactNode, useState, useRef, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useSettings } from '@/contexts/SettingsContext';
-import { TRANSLATIONS } from '@/lib/Constants';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface RibbonNavbarProps {
   children: ReactNode;
@@ -16,7 +15,7 @@ type TabRoute = '/gcode' | '/image' | '/settings' | '/statistics' | '/legend';
 export default function RibbonNavbar({ children, sceneManagers }: RibbonNavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { settings } = useSettings();
+  const { tab } = useTranslation();
   const [showContent, setShowContent] = useState(false);
   const [tabPosition, setTabPosition] = useState({ left: 0, width: 0 });
   const [mounted, setMounted] = useState(false);
@@ -34,14 +33,12 @@ export default function RibbonNavbar({ children, sceneManagers }: RibbonNavbarPr
     }
   }, [pathname]);
 
-  const t = TRANSLATIONS[settings.language];
-
   const tabs: { route: TabRoute; label: string; icon: string }[] = [
-    { route: '/gcode', label: t.tab.gcode, icon: 'fas fa-code' },
-    { route: '/image', label: t.tab.image, icon: 'fas fa-image' },
-    { route: '/settings', label: t.tab.settings, icon: 'fas fa-cog' },
-    { route: '/statistics', label: t.tab.statistics, icon: 'fas fa-chart-bar' },
-    { route: '/legend', label: t.tab.legend, icon: 'fas fa-palette' },
+    { route: '/gcode', label: tab('gcode'), icon: 'fas fa-code' },
+    { route: '/image', label: tab('image'), icon: 'fas fa-image' },
+    { route: '/settings', label: tab('settings'), icon: 'fas fa-cog' },
+    { route: '/statistics', label: tab('statistics'), icon: 'fas fa-chart-bar' },
+    { route: '/legend', label: tab('legend'), icon: 'fas fa-palette' },
   ];
 
   useEffect(() => {
