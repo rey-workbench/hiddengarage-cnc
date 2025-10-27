@@ -35,7 +35,7 @@ export const TRANSLATIONS = {
   en: {
     tab: {
       gcode: 'G-Code',
-      svg: 'SVG',
+      image: 'Image → G-Code',
       settings: 'Settings',
       statistics: 'Statistics',
       legend: 'Legend',
@@ -127,7 +127,7 @@ export const TRANSLATIONS = {
   id: {
     tab: {
       gcode: 'G-Code',
-      svg: 'SVG',
+      image: 'Gambar → G-Code',
       settings: 'Pengaturan',
       statistics: 'Statistik',
       legend: 'Legenda',

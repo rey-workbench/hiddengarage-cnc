@@ -96,7 +96,7 @@ export interface Settings {
   language: 'en' | 'id';
 }
 
-export type TabType = 'gcode' | 'svg' | 'settings' | 'statistics' | 'legend';
+export type TabType = 'gcode' | 'image' | 'settings' | 'statistics' | 'legend';
 
 export interface PanelState {
   position: { x: number; y: number };

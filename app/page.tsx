@@ -30,25 +30,37 @@ export default function Home() {
     console.log('✓ 3D scene initialized and ready');
   }, []);
 
-  const handleSVGGCodeGenerated = useCallback((gcode: string) => {
+  const handleImageGCodeGenerated = useCallback((gcode: string) => {
     setGCodeForParsing(gcode);
     setActiveTab('gcode');
+    
+    // Wait for tab switch and textarea to render, then populate it
     setTimeout(() => {
-      if (sceneManagers) {
-        const gcodeArea = document.querySelector('textarea');
-        if (gcodeArea) {
-          const event = new Event('input', { bubbles: true });
-          gcodeArea.dispatchEvent(event);
-        }
+      const gcodeTextarea = document.querySelector('textarea[placeholder*="G-code"]') as HTMLTextAreaElement;
+      if (gcodeTextarea) {
+        gcodeTextarea.value = gcode;
+        
+        // Trigger input event to update React state
+        const inputEvent = new Event('input', { bubbles: true });
+        gcodeTextarea.dispatchEvent(inputEvent);
+        
+        // Trigger change event as well
+        const changeEvent = new Event('change', { bubbles: true });
+        gcodeTextarea.dispatchEvent(changeEvent);
+        
+        // Focus on textarea
+        gcodeTextarea.focus();
+        
+        console.log('✓ G-Code loaded into editor');
       }
-    }, 100);
-  }, [sceneManagers, setActiveTab]);
+    }, 200);
+  }, [setActiveTab]);
 
   return (
     <div className="w-full h-screen relative overflow-hidden flex flex-col">
       <ControlPanel
         sceneManagers={sceneManagers}
-        onGCodeGenerated={handleSVGGCodeGenerated}
+        onGCodeGenerated={handleImageGCodeGenerated}
       />
       
       <div className="flex-1 relative" style={{ marginTop: 'var(--ribbon-height, 0px)' }}>

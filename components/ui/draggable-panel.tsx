@@ -153,7 +153,7 @@ export default function DraggablePanel({
   return (
     <div
       ref={panelRef}
-      className={`fixed z-10 ${className}`}
+      className={`fixed z-50 ${className}`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

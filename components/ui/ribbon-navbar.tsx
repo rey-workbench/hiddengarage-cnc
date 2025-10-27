@@ -15,13 +15,19 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
   const { settings } = useSettings();
   const [showContent, setShowContent] = useState(false);
   const [tabPosition, setTabPosition] = useState({ left: 0, width: 0 });
+  const [mounted, setMounted] = useState(false);
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const navbarRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const t = TRANSLATIONS[settings.language];
 
   const tabs: { id: TabType; label: string; icon: string }[] = [
     { id: 'gcode', label: t.tab.gcode, icon: 'fas fa-code' },
-    { id: 'svg', label: t.tab.svg, icon: 'fas fa-vector-square' },
+    { id: 'image', label: t.tab.image, icon: 'fas fa-image' },
     { id: 'settings', label: t.tab.settings, icon: 'fas fa-cog' },
     { id: 'statistics', label: t.tab.statistics, icon: 'fas fa-chart-bar' },
     { id: 'legend', label: t.tab.legend, icon: 'fas fa-palette' },
@@ -81,7 +87,7 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
             className={`ribbon-tab ${uiState.activeTab === tab.id ? 'active' : ''}`}
           >
             <i className={`${tab.icon} text-sm`} />
-            <span>{tab.label}</span>
+            <span>{mounted ? tab.label : ''}</span>
           </button>
         ))}
       </div>

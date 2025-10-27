@@ -3,7 +3,7 @@
 import { useUI } from '@/contexts/ui-context';
 import RibbonNavbar from '../ui/ribbon-navbar';
 import GCodeTab from '../tabs/gcode-tab';
-import SVGTab from '../tabs/svg-tab';
+import ImageTab from '../tabs/image-tab';
 import SettingsTab from '../tabs/settings-tab';
 import StatisticsTab from '../tabs/statistics-tab';
 import LegendTab from '../tabs/legend-tab';
@@ -31,8 +31,8 @@ export default function ControlPanel({ sceneManagers, onGCodeGenerated }: Contro
             toolhead={sceneManagers.toolhead}
           />
         )}
-        {uiState.activeTab === 'svg' && (
-          <SVGTab onGCodeGenerated={onGCodeGenerated || (() => {})} />
+        {uiState.activeTab === 'image' && (
+          <ImageTab onGCodeGenerated={onGCodeGenerated || (() => {})} />
         )}
         {uiState.activeTab === 'settings' && sceneManagers && (
           <SettingsTab
