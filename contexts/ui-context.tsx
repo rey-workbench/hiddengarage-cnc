@@ -1,7 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import type { UIState, TabType } from '@/types';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import type { UIState, TabType, PanelState } from '@/types';
 
 interface UIContextType {
   uiState: UIState;
@@ -14,7 +14,23 @@ interface UIContextType {
   showError: (message: string) => void;
   showWarning: (message: string) => void;
   showInfo: (message: string) => void;
+  updateControlPanelState: (state: Partial<PanelState>) => void;
+  updatePlaybackPanelState: (state: Partial<PanelState>) => void;
+  resetPanelPositions: () => void;
 }
+
+const getDefaultPanelStates = () => ({
+  controlPanelState: {
+    position: { x: 20, y: 20 },
+    size: { width: 380, height: 600 },
+    isMinimized: false,
+  },
+  playbackPanelState: {
+    position: { x: window.innerWidth - 340, y: window.innerHeight - 280 },
+    size: { width: 320, height: 260 },
+    isMinimized: false,
+  },
+});
 
 const defaultUIState: UIState = {
   activeTab: 'gcode',
@@ -24,6 +40,16 @@ const defaultUIState: UIState = {
   statusType: 'idle',
   isLoading: false,
   loadingMessage: '',
+  controlPanelState: {
+    position: { x: 20, y: 20 },
+    size: { width: 380, height: 600 },
+    isMinimized: false,
+  },
+  playbackPanelState: {
+    position: { x: 0, y: 0 },
+    size: { width: 320, height: 260 },
+    isMinimized: false,
+  },
 };
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -31,16 +57,64 @@ const UIContext = createContext<UIContextType | undefined>(undefined);
 export function UIProvider({ children }: { children: ReactNode }) {
   const [uiState, setUIState] = useState<UIState>(defaultUIState);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('cnc-panel-states');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setUIState((prev) => ({
+            ...prev,
+            controlPanelState: parsed.controlPanelState || prev.controlPanelState,
+            playbackPanelState: parsed.playbackPanelState || prev.playbackPanelState,
+          }));
+        } catch (e) {
+          console.error('Failed to load panel states:', e);
+        }
+      } else {
+        const defaults = getDefaultPanelStates();
+        setUIState((prev) => ({
+          ...prev,
+          ...defaults,
+        }));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const toSave = {
+        controlPanelState: uiState.controlPanelState,
+        playbackPanelState: uiState.playbackPanelState,
+      };
+      localStorage.setItem('cnc-panel-states', JSON.stringify(toSave));
+    }
+  }, [uiState.controlPanelState, uiState.playbackPanelState]);
+
   const setActiveTab = useCallback((tab: TabType) => {
     setUIState((prev) => ({ ...prev, activeTab: tab }));
   }, []);
 
   const togglePanelMinimized = useCallback(() => {
-    setUIState((prev) => ({ ...prev, isPanelMinimized: !prev.isPanelMinimized }));
+    setUIState((prev) => ({
+      ...prev,
+      isPanelMinimized: !prev.isPanelMinimized,
+      controlPanelState: {
+        ...prev.controlPanelState,
+        isMinimized: !prev.isPanelMinimized,
+      },
+    }));
   }, []);
 
   const togglePlaybackMinimized = useCallback(() => {
-    setUIState((prev) => ({ ...prev, isPlaybackMinimized: !prev.isPlaybackMinimized }));
+    setUIState((prev) => ({
+      ...prev,
+      isPlaybackMinimized: !prev.isPlaybackMinimized,
+      playbackPanelState: {
+        ...prev.playbackPanelState,
+        isMinimized: !prev.isPlaybackMinimized,
+      },
+    }));
   }, []);
 
   const setStatus = useCallback((message: string, type: UIState['statusType'] = 'idle') => {
@@ -75,6 +149,34 @@ export function UIProvider({ children }: { children: ReactNode }) {
     setStatus(message, 'info');
   }, [setStatus]);
 
+  const updateControlPanelState = useCallback((state: Partial<PanelState>) => {
+    setUIState((prev) => ({
+      ...prev,
+      controlPanelState: {
+        ...prev.controlPanelState,
+        ...state,
+      },
+    }));
+  }, []);
+
+  const updatePlaybackPanelState = useCallback((state: Partial<PanelState>) => {
+    setUIState((prev) => ({
+      ...prev,
+      playbackPanelState: {
+        ...prev.playbackPanelState,
+        ...state,
+      },
+    }));
+  }, []);
+
+  const resetPanelPositions = useCallback(() => {
+    const defaults = getDefaultPanelStates();
+    setUIState((prev) => ({
+      ...prev,
+      ...defaults,
+    }));
+  }, []);
+
   return (
     <UIContext.Provider
       value={{
@@ -88,6 +190,9 @@ export function UIProvider({ children }: { children: ReactNode }) {
         showError,
         showWarning,
         showInfo,
+        updateControlPanelState,
+        updatePlaybackPanelState,
+        resetPanelPositions,
       }}
     >
       {children}

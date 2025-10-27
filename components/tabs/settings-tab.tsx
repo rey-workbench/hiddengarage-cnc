@@ -1,6 +1,7 @@
 'use client';
 
 import { useSettings } from '@/contexts/settings-context';
+import { useUI } from '@/contexts/ui-context';
 import { useSceneControls } from '@/hooks/use-three-scene';
 import { TRANSLATIONS } from '@/lib/constants';
 import { ColorMode, CameraView } from '@/types';
@@ -12,6 +13,7 @@ interface SettingsTabProps {
 
 export default function SettingsTab({ sceneManager, onSpeedChange }: SettingsTabProps) {
   const { settings, updateSettings } = useSettings();
+  const { resetPanelPositions } = useUI();
   const { setCameraView, toggleGrid, toggleAxes } = useSceneControls(sceneManager);
   const t = TRANSLATIONS[settings.language];
 
@@ -89,13 +91,29 @@ export default function SettingsTab({ sceneManager, onSpeedChange }: SettingsTab
           <button onClick={() => setCameraView(CameraView.ISOMETRIC)} className="btn text-xs">{t.settings.viewIso}</button>
         </div>
       </div>
-      <div>
+      <div className="border-b border-dark-700 pb-4">
         <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">Bahasa / Language</h3>
         <select value={settings.language}
           onChange={(e) => updateSettings({ language: e.target.value as 'en' | 'id' })} className="input-base w-full">
           <option value="id">🇮🇩 Bahasa Indonesia</option>
           <option value="en">🇬🇧 English</option>
         </select>
+      </div>
+      <div>
+        <h3 className="text-xs font-semibold text-dark-400 uppercase tracking-wider mb-3">Panel Layout</h3>
+        <button 
+          onClick={() => {
+            if (confirm(settings.language === 'id' 
+              ? 'Reset posisi dan ukuran semua panel ke default?' 
+              : 'Reset all panel positions and sizes to default?')) {
+              resetPanelPositions();
+            }
+          }}
+          className="btn w-full flex items-center justify-center gap-2"
+        >
+          <i className="fas fa-undo text-xs" />
+          <span className="text-xs">{settings.language === 'id' ? 'Reset Posisi Panel' : 'Reset Panel Positions'}</span>
+        </button>
       </div>
     </div>
   );

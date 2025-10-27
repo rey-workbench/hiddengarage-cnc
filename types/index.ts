@@ -98,6 +98,12 @@ export interface Settings {
 
 export type TabType = 'gcode' | 'svg' | 'settings' | 'statistics' | 'legend';
 
+export interface PanelState {
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+  isMinimized: boolean;
+}
+
 export interface UIState {
   activeTab: TabType;
   isPanelMinimized: boolean;
@@ -106,4 +112,6 @@ export interface UIState {
   statusType: 'idle' | 'success' | 'error' | 'warning' | 'info';
   isLoading: boolean;
   loadingMessage: string;
+  controlPanelState: PanelState;
+  playbackPanelState: PanelState;
 }

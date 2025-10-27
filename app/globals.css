@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --ribbon-height: 0px;
+  }
+
   * {
     @apply box-border;
   }
@@ -51,6 +55,202 @@
   .panel {
     @apply bg-dark-900/95 backdrop-blur-md rounded-xl border border-dark-700/50;
     @apply shadow-2xl;
+  }
+
+  .panel-desktop {
+    background: linear-gradient(to bottom right, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95), rgba(8, 11, 22, 0.98));
+    @apply backdrop-blur-xl rounded-xl border;
+    border-color: rgba(51, 65, 85, 0.7);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    @apply transition-shadow duration-200;
+    position: relative;
+  }
+
+  .panel-desktop:hover {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+
+  .panel-desktop.dragging {
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: scale(1.01);
+  }
+
+  .panel-desktop.resizing {
+    border-color: rgba(59, 130, 246, 0.6);
+    transition: none;
+  }
+
+  .panel-header {
+    @apply flex items-center justify-between p-3.5;
+    background: linear-gradient(to right, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.6), rgba(30, 41, 59, 0.8));
+    border-bottom: 1px solid rgba(51, 65, 85, 0.7);
+    @apply rounded-t-xl backdrop-blur-sm;
+  }
+
+  .panel-header-btn {
+    @apply w-8 h-8 flex items-center justify-center rounded-lg;
+    background-color: rgba(51, 65, 85, 0.4);
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    @apply text-dark-300 hover:text-gray-100;
+    @apply transition-all duration-200 hover:scale-105;
+  }
+
+  .panel-header-btn:hover {
+    background-color: rgba(71, 85, 105, 0.6);
+  }
+
+  .panel-content {
+    @apply overflow-y-auto overflow-x-hidden p-4;
+    @apply scrollbar-thin;
+  }
+
+  .resize-handle {
+    @apply absolute bg-transparent transition-all duration-200;
+  }
+
+  .resize-handle:hover {
+    @apply bg-primary-500/20;
+  }
+
+  .resize-handle-e {
+    @apply right-0 top-0 w-1 h-full cursor-ew-resize;
+  }
+
+  .resize-handle-s {
+    @apply bottom-0 left-0 w-full h-1 cursor-ns-resize;
+  }
+
+  .resize-handle-se {
+    @apply right-0 bottom-0 w-4 h-4 cursor-nwse-resize;
+    @apply rounded-tl-full;
+  }
+
+  .resize-handle-se::after {
+    content: '';
+    @apply absolute bottom-0.5 right-0.5 w-3 h-3;
+    @apply border-r-2 border-b-2;
+    border-color: rgba(71, 85, 105, 0.5);
+    @apply rounded-br;
+  }
+
+  /* Ribbon Navbar Styles */
+  .ribbon-navbar {
+    @apply fixed top-0 left-0 right-0 z-50;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
+    @apply backdrop-blur-xl;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  .ribbon-titlebar {
+    @apply flex items-center justify-between px-4 py-2;
+    background: linear-gradient(to bottom, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+    border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+  }
+
+  .ribbon-collapse-btn {
+    @apply w-7 h-7 flex items-center justify-center rounded;
+    background-color: rgba(51, 65, 85, 0.4);
+    @apply text-dark-300 hover:text-gray-100;
+    @apply transition-all duration-200;
+  }
+
+  .ribbon-collapse-btn:hover {
+    background-color: rgba(71, 85, 105, 0.6);
+  }
+
+  .ribbon-tabs {
+    @apply flex items-center gap-1 px-3;
+    background: linear-gradient(to bottom, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.6));
+  }
+
+  .ribbon-tab {
+    @apply flex items-center gap-2 px-4 py-2;
+    @apply text-sm font-medium text-dark-300;
+    @apply transition-all duration-200;
+    border-bottom: 2px solid transparent;
+    @apply hover:text-gray-100;
+    background: transparent;
+  }
+
+  .ribbon-tab:hover {
+    background: rgba(51, 65, 85, 0.3);
+  }
+
+  .ribbon-tab.active {
+    @apply text-primary-400;
+    border-bottom-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  .ribbon-content-dropdown {
+    @apply absolute;
+    top: 100%;
+    z-index: 60;
+    margin-top: 0;
+    animation: ribbonSlideDown 0.2s ease-out;
+  }
+
+  .ribbon-content-dropdown-inner {
+    @apply mt-2;
+    width: 450px;
+    max-height: 70vh;
+    @apply overflow-y-auto scrollbar-thin;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
+    @apply backdrop-blur-xl rounded-lg;
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .ribbon-tab-content {
+    @apply space-y-4 p-4;
+  }
+
+  @keyframes ribbonSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .notification-toast {
+    @apply px-4 py-3 rounded-lg border backdrop-blur-md;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .ribbon-group {
+    @apply inline-flex flex-col gap-2 px-4 py-2;
+    border-right: 1px solid rgba(51, 65, 85, 0.3);
+  }
+
+  .ribbon-group:last-child {
+    border-right: none;
+  }
+
+  .ribbon-group-label {
+    @apply text-[10px] text-dark-400 uppercase tracking-wider;
+    @apply font-semibold text-center;
+  }
+
+  .ribbon-group-content {
+    @apply flex items-center gap-2;
   }
 
   .input-base {

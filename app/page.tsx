@@ -6,6 +6,7 @@ import { useUI } from '@/contexts/ui-context';
 import ControlPanel from '@/components/panels/control-panel';
 import PlaybackPanel from '@/components/panels/playback-panel';
 import LoadingOverlay from '@/components/ui/loading-overlay';
+import StatusBar from '@/components/ui/status-bar';
 
 const ThreeViewer = dynamic(() => import('@/components/viewer/three-viewer'), {
   ssr: false,
@@ -44,22 +45,25 @@ export default function Home() {
   }, [sceneManagers, setActiveTab]);
 
   return (
-    <div className="w-full h-screen relative overflow-hidden">
-      <ThreeViewer onInitialized={handleInitialized} />
-      
+    <div className="w-full h-screen relative overflow-hidden flex flex-col">
       <ControlPanel
         sceneManagers={sceneManagers}
         onGCodeGenerated={handleSVGGCodeGenerated}
       />
       
-      {sceneManagers && (
-        <PlaybackPanel playbackController={sceneManagers.playbackController} />
-      )}
+      <div className="flex-1 relative" style={{ marginTop: 'var(--ribbon-height, 0px)' }}>
+        <ThreeViewer onInitialized={handleInitialized} />
+        
+        {sceneManagers && (
+          <PlaybackPanel playbackController={sceneManagers.playbackController} />
+        )}
 
-      <LoadingOverlay />
+        <StatusBar />
+        <LoadingOverlay />
 
-      <div className="fixed bottom-5 left-5 text-xs text-dark-500 font-mono pointer-events-none">
-        v1.0.0 | CNC Simulator Next.js
+        <div className="fixed bottom-5 left-5 text-xs text-dark-500 font-mono pointer-events-none z-10">
+          v1.1.0 | CNC Simulator Next.js
+        </div>
       </div>
     </div>
   );
