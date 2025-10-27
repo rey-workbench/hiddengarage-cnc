@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from 'react';
 import type { PlaybackController } from '@/lib/three/PlaybackController';
 import { useSimulation } from '@/contexts/SimulationContext';
-import { GCodeSegment } from '@/lib/Constants';
+import type { GCodeSegment } from '@/lib/Constants';
 
 export function usePlayback(
   playbackController: PlaybackController | null,
@@ -23,7 +23,6 @@ export function usePlayback(
     };
 
     playbackController.onPlaybackComplete = () => {
-      console.log('Playback completed');
     };
 
     return () => {

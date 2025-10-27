@@ -4,6 +4,7 @@ import { useState, useRef, ChangeEvent } from 'react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useUI } from '@/contexts/UiContext';
 import { useTranslation } from '@/hooks/useTranslation';
+import Image from 'next/image';
 
 interface ImageTabProps {
   onGCodeGenerated: (gcode: string) => void;
@@ -128,7 +129,14 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
 
       {imagePreview && (
         <div className="mt-4 p-3 bg-dark-800/60 rounded-lg">
-          <img src={imagePreview} alt="Preview" className="w-full h-auto rounded" />
+          <Image 
+            src={imagePreview} 
+            alt="Preview" 
+            className="w-full h-auto rounded"
+            width={100}
+            height={100}
+            style={{ objectFit: 'contain' }}
+          />
         </div>
       )}
     </div>
@@ -457,7 +465,6 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
       const { detectImageEdges, scaleContoursToStock } = await import('@/lib/ImageProcessor');
       const { generateGCodeFromImage } = await import('@/lib/ImageToGcode');
 
-      // Detect edges
       const contours = await detectImageEdges(selectedImage);
       
       if (contours.length === 0) {
@@ -467,12 +474,10 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
 
       showInfo(image('contoursDetected').replace('{count}', contours.length.toString()));
 
-      // Get image dimensions from canvas
-      const img = new Image();
+      const img = new window.Image();
       img.src = imagePreview!;
       await new Promise((resolve) => { img.onload = resolve; });
 
-      // Scale contours to stock
       const scaledContours = scaleContoursToStock(
         contours,
         img.width,
@@ -483,7 +488,6 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
         setupConfig.originY
       );
 
-      // Generate G-code
       const gcode = generateGCodeFromImage(scaledContours, {
         strategy,
         toolDiameter: toolConfig.diameter,
@@ -498,7 +502,6 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
 
       showSuccess(image('gcodeGenerated').replace('{lines}', gcode.split('\n').length.toString()));
 
-      // Pass to parent component and trigger switch
       onGCodeGenerated(gcode);
 
     } catch (error) {
@@ -566,7 +569,6 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
 
   return (
     <div className="space-y-4">
-      {/* Progress Steps */}
       <div className="flex items-center justify-between">
         {steps.map((step, index) => (
           <div key={step.id} className="flex items-center flex-1">
@@ -597,7 +599,6 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
         ))}
       </div>
 
-      {/* Current Step Content */}
       <div className="border border-dark-700 rounded-lg p-4">
         {currentStep === 'upload' && renderUploadStep()}
         {currentStep === 'setup' && renderSetupStep()}

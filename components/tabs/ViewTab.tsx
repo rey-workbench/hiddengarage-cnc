@@ -17,7 +17,6 @@ export default function ViewTab({ sceneManager }: ViewTabProps) {
 
   return (
     <div className="space-y-3">
-      {/* UI Size Presets */}
       <div className="border-b border-dark-700 pb-3">
         <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">
           {view('uiSize')}
@@ -65,7 +64,6 @@ export default function ViewTab({ sceneManager }: ViewTabProps) {
         </div>
       </div>
 
-      {/* Color Mode */}
       <div className="border-b border-dark-700 pb-3">
         <Select
           label={view('colorMode')}
@@ -84,7 +82,6 @@ export default function ViewTab({ sceneManager }: ViewTabProps) {
         )}
       </div>
 
-      {/* Display Options */}
       <div className="border-b border-dark-700 pb-3">
         <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">
           {view('displayOptions')}
@@ -132,7 +129,6 @@ export default function ViewTab({ sceneManager }: ViewTabProps) {
         </div>
       </div>
 
-      {/* Toolhead Size */}
       <div>
         <h3 className="text-[10px] font-semibold text-dark-400 uppercase tracking-wider mb-2">
           {view('toolheadSize')}

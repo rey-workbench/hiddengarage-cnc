@@ -46,7 +46,6 @@ export function useGCode(
       pathRenderer.setSegments(result.segments);
       pathRenderer.buildVisuals();
       
-      // Reset progressive trailing for new G-code (start all white)
       pathRenderer.resetProgressiveTrailing();
 
       if (isFinite(result.bbox.minX)) {
@@ -88,7 +87,6 @@ export function useGCode(
     } catch (error) {
       setLoading(false);
       showError(`Error parsing G-code: ${error}`);
-      console.error('Parse error:', error);
       return null;
     }
   }, [

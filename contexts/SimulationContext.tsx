@@ -10,7 +10,6 @@ import type {
   SimulationState,
 } from '@/lib/Constants';
 import { GCodeParser } from '@/lib/GcodeParser';
-import { SVGConverter } from '@/lib/SvgConverter';
 
 interface SimulationContextType {
   segments: GCodeSegment[];
@@ -19,7 +18,6 @@ interface SimulationContextType {
   toolPosition: ToolPosition;
   simulationState: SimulationState;
   parseGCode: (gcodeText: string, options?: { arcSegments?: number }) => ParseResult;
-  convertSVG: (file: File, options?: any) => Promise<string>;
   updateToolPosition: (position: ToolPosition) => void;
   updateSimulationState: (state: SimulationState) => void;
   reset: () => void;
@@ -47,7 +45,6 @@ export function SimulationProvider({ children }: { children: ReactNode }) {
   });
 
   const parserRef = useRef<GCodeParser>(new GCodeParser());
-  const svgConverterRef = useRef<SVGConverter>(new SVGConverter());
 
   const parseGCode = useCallback((gcodeText: string, options?: { arcSegments?: number }): ParseResult => {
     const result = parserRef.current.parse(gcodeText, options);
@@ -59,14 +56,6 @@ export function SimulationProvider({ children }: { children: ReactNode }) {
     return result;
   }, []);
 
-  const convertSVG = useCallback(async (file: File, options?: any): Promise<string> => {
-    if (options) {
-      svgConverterRef.current.setOptions(options);
-    }
-    
-    const gcode = await svgConverterRef.current.convertFile(file);
-    return gcode;
-  }, []);
 
   const updateToolPosition = useCallback((position: ToolPosition) => {
     setToolPosition(position);
@@ -105,7 +94,6 @@ export function SimulationProvider({ children }: { children: ReactNode }) {
         toolPosition,
         simulationState,
         parseGCode,
-        convertSVG,
         updateToolPosition,
         updateSimulationState,
         reset,

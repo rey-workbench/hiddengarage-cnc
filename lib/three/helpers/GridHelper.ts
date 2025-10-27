@@ -5,7 +5,7 @@ export class CustomGridHelper {
 
   constructor(size: number = 200, divisions: number = 20, color: number = 0x444444) {
     this.grid = new THREE.GridHelper(size, divisions, color, color);
-    this.grid.position.y = -0.5; // Position grid slightly below origin
+    this.grid.position.y = -0.5;
   }
 
   getObject(): THREE.GridHelper {
@@ -17,10 +17,8 @@ export class CustomGridHelper {
   }
 
   updateSize(size: number, divisions: number, color: number = 0x444444): THREE.GridHelper {
-    // Remove old grid and create new one with updated size
     const newGrid = new THREE.GridHelper(size, divisions, color, color);
     
-    // Copy position from old grid
     newGrid.position.copy(this.grid.position);
     newGrid.visible = this.grid.visible;
     

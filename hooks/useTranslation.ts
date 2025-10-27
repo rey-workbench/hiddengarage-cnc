@@ -1,27 +1,11 @@
 import { useTranslations } from 'next-intl';
 
-/**
- * Custom translation hook dengan shorthand methods
- * Wrap next-intl useTranslations untuk kemudahan penggunaan
- * 
- * @example
- * const { t, tab, gcode } = useTranslation();
- * 
- * // Full path
- * t('gcode.parse')
- * 
- * // Shorthand - lebih pendek
- * gcode('parse')
- * tab('settings')
- */
 export function useTranslation() {
   const t = useTranslations();
 
   return {
-    // Full translation function
     t: (key: string) => t(key),
     
-    // Shorthand methods - lebih pendek dan readable
     common: (key: string) => t(`common.${key}`),
     tab: (key: string) => t(`tab.${key}`),
     gcode: (key: string) => t(`gcode.${key}`),

@@ -10,7 +10,6 @@ import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import StatusBar from '@/components/ui/StatusBar';
 import RibbonNavbar from '@/components/ui/RibbonNavbar';
 
-// Lazy load components
 const GCodeTab = dynamic(() => import('@/components/tabs/GCodeTab'), { ssr: false });
 const ImageTab = dynamic(() => import('@/components/tabs/ImageTab'), { ssr: false });
 const ViewTab = dynamic(() => import('@/components/tabs/ViewTab'), { ssr: false });
@@ -23,14 +22,12 @@ export default function Home() {
   const { sceneManagers, setSceneManagers } = useWorkspace();
   const { activeTab } = useActiveTab();
   
-  // Apply UI scaling
   useUIScale();
 
   const handleInitialized = useCallback((managers: any) => {
     setSceneManagers(managers);
   }, [setSceneManagers]);
 
-  // Render active tab content
   const renderTab = () => {
     if (!sceneManagers) return null;
 
@@ -62,12 +59,10 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen flex flex-col">
-      {/* Navbar - not affected by zoom */}
       <RibbonNavbar sceneManagers={sceneManagers}>
         {renderTab()}
       </RibbonNavbar>
       
-      {/* Main content - affected by zoom */}
       <div className="main-content flex-1 relative" style={{ marginTop: 'var(--ribbon-height, 0px)' }}>
         <ThreeViewer onInitialized={handleInitialized} />
         {sceneManagers && <PlaybackPanel playbackController={sceneManagers.playbackController} />}

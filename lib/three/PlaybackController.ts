@@ -58,7 +58,6 @@ export class PlaybackController {
       this.emitPositionUpdate([0, 0, 0], 0);
     }
     
-    // Reset progressive trailing colors
     this.pathRenderer.resetProgressiveTrailing();
     
     this.emitStateChange();
@@ -84,29 +83,24 @@ export class PlaybackController {
     const from = segment.from;
     const to = segment.to;
     
-    // Calculate distance
     const dist = Math.hypot(
       to[0] - from[0],
       to[1] - from[1],
       to[2] - from[2]
     );
     
-    // Calculate speed (same as original)
     const feedRate = segment.feed || 600;
     const mmPerSec = (feedRate / 60.0) * this.speed;
-    const step = mmPerSec * (1 / 60); // 60 FPS
+    const step = mmPerSec * (1 / 60);
     
     const progressIncrement = step / Math.max(dist, 1e-6);
     this.segmentProgress += progressIncrement;
     
-    // Clamp progress
     this.segmentProgress = Math.min(1, Math.max(0, this.segmentProgress));
     
     if (this.segmentProgress >= 1) {
-      // Segment complete
       this.toolhead.setPositionXYZ(to[0], to[1], to[2]);
       
-      // Update progressive trailing colors for the completed segment (before increment)
       this.pathRenderer.updateProgressiveTrailing(this.currentSegmentIndex);
       
       this.currentSegmentIndex++;
@@ -119,14 +113,12 @@ export class PlaybackController {
         }
       }
     } else {
-      // Interpolate position
       const nx = from[0] + (to[0] - from[0]) * this.segmentProgress;
       const ny = from[1] + (to[1] - from[1]) * this.segmentProgress;
       const nz = from[2] + (to[2] - from[2]) * this.segmentProgress;
       this.toolhead.setPositionXYZ(nx, ny, nz);
     }
     
-    // Update position callback
     if (this.onPositionUpdate) {
       const pos = this.toolhead.getPosition();
       this.onPositionUpdate({

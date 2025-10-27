@@ -58,7 +58,6 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
       resizable={true}
     >
       <div className="space-y-2.5">
-        {/* Compact Button Group */}
         <div className="flex gap-1.5">
           <button 
             onClick={handlePlay} 
@@ -102,7 +101,6 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
           </button>
         </div>
 
-        {/* Speed Slider */}
         <Slider
           label={s('playbackSpeed')}
           value={settings.playbackSpeed}
@@ -115,7 +113,6 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
           valueFormatter={(val) => val.toFixed(2)}
         />
 
-        {/* Tool Position Display */}
         <div>
           <h4 className="text-[10px] font-bold text-dark-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
             <i className="fas fa-crosshairs text-primary-400 text-[10px]" />
@@ -123,10 +120,8 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
           </h4>
           <div className="relative bg-gradient-to-br from-dark-800/70 to-dark-900/60 rounded-lg p-2 border border-dark-700/60 
             shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] overflow-hidden">
-            {/* Subtle glow effect */}
             <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-primary-500/5 to-transparent pointer-events-none" />
             
-            {/* Position values */}
             <div className="relative space-y-1">
               <div className="flex items-center gap-2 font-mono text-[10px]">
                 <span className="text-red-400 font-bold min-w-[16px]">X:</span>
@@ -137,10 +132,8 @@ export default function PlaybackPanel({ playbackController }: PlaybackPanelProps
                 <span className="text-gray-100 font-semibold tabular-nums">{toolPosition.z.toFixed(3)}</span>
               </div>
               
-              {/* Separator */}
               <div className="h-px bg-gradient-to-r from-transparent via-dark-600 to-transparent" />
               
-              {/* Feed and Spindle */}
               <div className="flex items-center gap-3 font-mono text-[10px]">
                 <div className="flex items-center gap-1">
                   <i className="fas fa-tachometer-alt text-amber-400 text-[9px]" />

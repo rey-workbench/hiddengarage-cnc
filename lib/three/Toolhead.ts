@@ -18,7 +18,6 @@ export class Toolhead {
   }
 
   private create(): void {
-    // Cone geometry - tip pointing down
     const coneGeo = new THREE.ConeGeometry(0.5, 2, 16, 1);
     const coneMat = new THREE.MeshStandardMaterial({
       color: CNCConstants.colors.toolhead,
@@ -29,11 +28,9 @@ export class Toolhead {
     });
     const cone = new THREE.Mesh(coneGeo, coneMat);
     
-    // Rotate 180° so tip points down, position at y=1
     cone.rotation.x = Math.PI;
     cone.position.y = 1;
     
-    // Wireframe outline
     const wireframeGeo = new THREE.WireframeGeometry(coneGeo);
     const wireframeMat = new THREE.LineBasicMaterial({
       color: CNCConstants.colors.toolhead,
@@ -64,7 +61,6 @@ export class Toolhead {
       autoScale = Math.log10(objectSize) * 5;
     }
     
-    // Clamp scale to min/max values
     autoScale = Math.max(autoScale, 0.5);
     autoScale = Math.min(autoScale, 100);
     
@@ -87,21 +83,17 @@ export class Toolhead {
   autoHideForLargeObject(objectSize: number): boolean {
     if (objectSize > CNCConstants.defaults.toolheadAutoHideSize && this.group.visible) {
       this.group.visible = false;
-      console.log('  ⚠️ Toolhead auto-hidden (object too large). Enable in Settings tab if needed.');
       return true;
     }
     return false;
   }
 
   setPosition(position: ToolPosition): void {
-    // Convert G-code coordinates (X, Y, Z) to Three.js coordinates (X, Z, Y)
-    // Original: group.position.set(pos[0], pos[2], pos[1])
     this.group.position.set(position.x, position.z, position.y);
     this.currentPosition = [position.x, position.y, position.z];
   }
 
   setPositionXYZ(x: number, y: number, z: number): void {
-    // Convert G-code coordinates (X, Y, Z) to Three.js coordinates (X, Z, Y)
     this.group.position.set(x, z, y);
     this.currentPosition = [x, y, z];
   }

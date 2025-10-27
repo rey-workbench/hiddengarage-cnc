@@ -79,7 +79,6 @@ export function CardHeader({
       className={`flex items-center justify-between mb-3 pb-2 border-b border-dark-700/50 relative ${className}`}
       {...props}
     >
-      {/* Bottom glow */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/20 to-transparent" />
       
       <div>

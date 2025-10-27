@@ -1,8 +1,3 @@
-/**
- * Image to G-Code Processor
- * Converts images to G-code using edge detection and vectorization
- */
-
 export interface ImageEdge {
   x: number;
   y: number;
@@ -13,9 +8,6 @@ export interface ImageContour {
   isClosed: boolean;
 }
 
-/**
- * Process image and detect edges using Canvas API
- */
 export async function detectImageEdges(
   imageFile: File,
   threshold: number = 128
@@ -58,9 +50,6 @@ export async function detectImageEdges(
   });
 }
 
-/**
- * Simple edge detection using brightness threshold
- */
 function detectEdges(imageData: ImageData, threshold: number): boolean[][] {
   const { width, height, data } = imageData;
   const edges: boolean[][] = Array(height).fill(null).map(() => Array(width).fill(false));
@@ -70,7 +59,6 @@ function detectEdges(imageData: ImageData, threshold: number): boolean[][] {
       const idx = (y * width + x) * 4;
       const brightness = (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
 
-      // Check neighbors for edge detection
       if (brightness < threshold) {
         const neighbors = [
           getBrightness(data, x - 1, y, width),
@@ -94,9 +82,6 @@ function getBrightness(data: Uint8ClampedArray, x: number, y: number, width: num
   return (data[idx] + data[idx + 1] + data[idx + 2]) / 3;
 }
 
-/**
- * Trace contours from edge map
- */
 function traceContours(edges: boolean[][], width: number, height: number): ImageContour[] {
   const contours: ImageContour[] = [];
   const visited: boolean[][] = Array(height).fill(null).map(() => Array(width).fill(false));
@@ -105,7 +90,7 @@ function traceContours(edges: boolean[][], width: number, height: number): Image
     for (let x = 0; x < width; x++) {
       if (edges[y][x] && !visited[y][x]) {
         const contour = traceContour(edges, visited, x, y, width, height);
-        if (contour.points.length > 5) { // Filter out noise
+        if (contour.points.length > 5) {
           contours.push(contour);
         }
       }
@@ -115,9 +100,6 @@ function traceContours(edges: boolean[][], width: number, height: number): Image
   return contours;
 }
 
-/**
- * Trace a single contour starting from a point
- */
 function traceContour(
   edges: boolean[][],
   visited: boolean[][],
@@ -139,13 +121,11 @@ function traceContour(
     visited[y][x] = true;
     points.push({ x, y });
 
-    // Check neighbors
     for (const [dx, dy] of directions) {
       stack.push([x + dx, y + dy]);
     }
   }
 
-  // Simplify contour using Douglas-Peucker
   const simplified = douglasPeucker(points, 2);
 
   return {
@@ -154,9 +134,6 @@ function traceContour(
   };
 }
 
-/**
- * Douglas-Peucker line simplification algorithm
- */
 function douglasPeucker(points: ImageEdge[], epsilon: number): ImageEdge[] {
   if (points.length < 3) return points;
 
@@ -191,9 +168,6 @@ function perpendicularDistance(point: ImageEdge, lineStart: ImageEdge, lineEnd: 
   return Math.abs(dy * point.x - dx * point.y + lineEnd.x * lineStart.y - lineEnd.y * lineStart.x) / norm;
 }
 
-/**
- * Scale and offset contours to fit stock dimensions
- */
 export function scaleContoursToStock(
   contours: ImageContour[],
   imageWidth: number,

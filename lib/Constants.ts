@@ -1,6 +1,3 @@
-// ============================================
-// TYPES & INTERFACES
-// ============================================
 
 export interface Point3D {
   x: number;
@@ -120,10 +117,6 @@ export interface UIState {
   controlPanelState: PanelState;
   playbackPanelState: PanelState;
 }
-
-// ============================================
-// CONSTANTS & CONFIGURATION
-// ============================================
 
 export const CNCConstants = {
   defaults: {

@@ -85,10 +85,8 @@ export default function StatusBar() {
       className={`fixed top-16 right-4 z-[100] ${styles.bg} ${styles.border} ${styles.shadow} backdrop-blur-xl border rounded-lg px-3 py-2 animate-[slideInRight_0.3s_cubic-bezier(0.34,1.56,0.64,1)]`}
       style={{ maxWidth: '320px' }}
     >
-      {/* Glow effect */}
       <div className={`absolute inset-0 ${styles.glow} rounded-lg opacity-50 blur-lg`} />
       
-      {/* Content */}
       <div className="relative flex items-start gap-2">
         <div className="relative">
           <div className={`absolute inset-0 ${styles.glow} rounded-full animate-ping opacity-75`} />

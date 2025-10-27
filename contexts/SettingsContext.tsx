@@ -33,7 +33,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const isInitialMount = useRef(true);
 
   useEffect(() => {
-    // Load saved settings from localStorage
     const savedSettings = localStorage.getItem('cnc-settings');
     if (savedSettings) {
       try {
@@ -44,13 +43,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         console.error('Failed to parse saved settings:', error);
       }
     }
-    // Mark that initial mount is complete
     isInitialMount.current = false;
   }, []);
 
-  // Watch for language changes and trigger locale loading (skip initial mount)
   useEffect(() => {
-    // Skip on initial mount to avoid render-phase updates
     if (isInitialMount.current) {
       return;
     }
@@ -68,7 +64,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem('cnc-settings', JSON.stringify(newSettings));
       } catch (error) {
-        console.error('Failed to save settings:', error);
       }
       
       return newSettings;

@@ -81,25 +81,20 @@ export default function ConfirmDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center animate-[fadeIn_0.2s_ease-out]">
-      {/* Backdrop with blur */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]"
         onClick={onCancel}
       />
       
-      {/* Dialog */}
       <div className="relative w-full max-w-sm mx-4 animate-[dialogSlideIn_0.3s_cubic-bezier(0.34,1.56,0.64,1)]">
         <div className="relative bg-gradient-to-br from-dark-800/98 to-dark-900/98 backdrop-blur-xl rounded-xl border border-dark-600/50 shadow-2xl overflow-hidden">
-          {/* Animated gradient border effect */}
           <div className="absolute inset-0 rounded-xl opacity-50">
             <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 via-primary-500/20 to-primary-500/0 animate-pulse" />
           </div>
 
           <div className="relative p-4 space-y-3">
-            {/* Icon */}
             <div className="flex justify-center">
               <div className="relative">
-                {/* Pulse animation background */}
                 <div className={`absolute inset-0 ${config.pulseColor} rounded-full animate-ping opacity-75`} />
                 <div className={`relative w-16 h-16 ${config.bgColor} ${config.borderColor} border-2 rounded-full flex items-center justify-center`}>
                   <i className={`${config.iconClass} ${config.iconColor} text-3xl`} />
@@ -107,7 +102,6 @@ export default function ConfirmDialog({
               </div>
             </div>
 
-            {/* Title */}
             <div className="text-center">
               <h3 className="text-base font-bold text-gray-100 mb-1.5">
                 {title}
@@ -117,7 +111,6 @@ export default function ConfirmDialog({
               </p>
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-2 pt-1">
               <button
                 onClick={onCancel}

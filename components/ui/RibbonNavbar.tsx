@@ -24,32 +24,26 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const navbarRef = useRef<HTMLDivElement>(null);
 
-  // Get tabs from constants and add translations
   const tabs = CNCConstants.tabs.map(t => ({
     ...t,
     label: tab(t.name)
   }));
 
-  // Initialize & show content when tab changes
   useEffect(() => {
     setMounted(true);
     if (activeTab) setShowContent(true);
   }, [activeTab]);
 
-  // Update tab indicator position (recalculate on activeTab, mounted, or uiSize change)
   useEffect(() => {
     const tabElement = tabRefs.current[activeTab];
     const navbarElement = navbarRef.current;
     
     if (tabElement && navbarElement && mounted) {
-      // Get current zoom level from body
       const zoom = parseFloat(document.body.style.zoom || '1');
       
-      // Get positions relative to navbar
       const navbarRect = navbarElement.getBoundingClientRect();
       const tabRect = tabElement.getBoundingClientRect();
       
-      // Calculate relative position and adjust for zoom
       const relativeLeft = (tabRect.left - navbarRect.left) / zoom;
       const width = tabRect.width / zoom;
       
@@ -57,7 +51,6 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
     }
   }, [activeTab, mounted, settings.uiSize]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     if (!showContent) return;
     
@@ -73,7 +66,6 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
 
   return (
     <div className="ribbon-navbar" ref={navbarRef}>
-      {/* Title Bar - Compact */}
       <div className="ribbon-titlebar">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 group">
@@ -98,9 +90,7 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
         </button>
       </div>
 
-      {/* Tabs with enhanced styling */}
       <div className="ribbon-tabs relative">
-        {/* Active tab indicator */}
         {mounted && activeTab && (
           <div
             className="absolute bottom-0 h-0.5 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-400 transition-all duration-300 ease-out shadow-[0_0_8px_rgba(59,130,246,0.5)]"
@@ -134,11 +124,9 @@ export default function RibbonNavbar({ children }: RibbonNavbarProps) {
         ))}
       </div>
 
-      {/* Content Dropdown with enhanced animation */}
       {showContent && (
         <div className="ribbon-content-dropdown" style={{ left: `${tabPosition.left}px` }}>
           <div className="ribbon-content-dropdown-inner">
-            {/* Top glow effect */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/50 to-transparent" />
             {children}
           </div>

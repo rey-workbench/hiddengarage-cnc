@@ -45,7 +45,6 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
       setLocale(newLocale);
       setMessages(newMessages);
     } catch (error) {
-      console.error('Failed to load locale:', error);
     } finally {
       setIsLoading(false);
       
@@ -59,7 +58,6 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
   };
 
   useEffect(() => {
-    // Check localStorage for saved language
     const savedSettings = localStorage.getItem('cnc-settings');
     if (savedSettings) {
       try {
@@ -72,7 +70,6 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
       }
     }
 
-    // Listen for storage changes (when language is changed in another tab)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'cnc-settings' && e.newValue) {
         try {
@@ -90,7 +87,6 @@ export function LocaleProvider({ children, initialLocale, initialMessages }: Loc
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [locale]);
 
-  // Expose loadLocale function globally so SettingsContext can use it
   useEffect(() => {
     (window as any).__loadLocale = loadLocale;
     return () => {

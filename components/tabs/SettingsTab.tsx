@@ -80,7 +80,6 @@ export default function SettingsTab({ sceneManager }: SettingsTabProps) {
         </button>
       </div>
 
-      {/* Confirm Dialog */}
       <ConfirmDialog
         isOpen={dialogState.isOpen}
         title={dialogState.title}

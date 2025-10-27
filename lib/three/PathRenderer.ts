@@ -25,7 +25,6 @@ export class PathRenderer {
     this.colorMode = mode;
     this.rebuild();
     
-    // Reset progressive trailing when switching to Progressive mode
     if (mode === ColorMode.Progressive) {
       this.resetProgressiveTrailing();
     }
@@ -43,8 +42,6 @@ export class PathRenderer {
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i];
       
-      // Convert G-code coordinates (X, Y, Z) to Three.js coordinates (X, Z, Y)
-      // This swaps Y and Z because Three.js uses Y-up while G-code uses Z-up
       positions.push(segment.from[0], segment.from[2], segment.from[1]);
       positions.push(segment.to[0], segment.to[2], segment.to[1]);
 
@@ -57,7 +54,6 @@ export class PathRenderer {
     const colorAttr = new THREE.Float32BufferAttribute(colors, 3);
     geometry.setAttribute('color', colorAttr);
     
-    // Store color attribute reference for Progressive mode updates
     if (this.colorMode === ColorMode.Progressive) {
       this.colorAttribute = colorAttr;
     }
@@ -118,8 +114,6 @@ export class PathRenderer {
   }
 
   private getProgressiveColor(segment: GCodeSegment, index: number): THREE.Color {
-    // In Progressive mode: all lines start white
-    // Colors change dynamically via updateProgressiveTrailing() after toolhead passes
     return new THREE.Color(0xffffff);
   }
 
@@ -130,30 +124,25 @@ export class PathRenderer {
 
     this.currentSegmentIndex = currentSegmentIndex;
 
-    // Update colors for segments as toolhead passes through them
     const colors = this.colorAttribute.array as Float32Array;
     
     for (let i = 0; i < this.segments.length; i++) {
       const segment = this.segments[i];
       let color: THREE.Color;
       
-      // Color segments that have been reached by toolhead (including current segment)
       if (i <= currentSegmentIndex) {
-        // Active and completed segments: color based on movement type
         if (segment.type === SegmentType.ArcCW || segment.type === SegmentType.ArcCCW) {
-          color = new THREE.Color(CNCConstants.colors.arcCut); // Green for arcs
+          color = new THREE.Color(CNCConstants.colors.arcCut);
         } else if (segment.type === SegmentType.Linear || segment.type === SegmentType.Rapid) {
-          color = new THREE.Color(CNCConstants.colors.linearCut); // Red for straight
+          color = new THREE.Color(CNCConstants.colors.linearCut);
         } else {
-          color = new THREE.Color(0xffffff); // White for others
+          color = new THREE.Color(0xffffff);
         }
       } else {
-        // Not yet reached: white
         color = new THREE.Color(0xffffff);
       }
 
-      // Each segment has 2 vertices (from, to)
-      const colorIndex = i * 6; // 2 vertices * 3 components (RGB)
+      const colorIndex = i * 6;
       colors[colorIndex] = color.r;
       colors[colorIndex + 1] = color.g;
       colors[colorIndex + 2] = color.b;
@@ -171,8 +160,7 @@ export class PathRenderer {
     }
 
     this.currentSegmentIndex = 0;
-
-    // Reset all segments back to white
+    
     const colors = this.colorAttribute.array as Float32Array;
     const whiteColor = new THREE.Color(0xffffff);
     

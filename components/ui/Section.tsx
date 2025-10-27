@@ -20,7 +20,6 @@ export function Section({
   return (
     <div className={`space-y-2 ${className}`} {...props}>
       <div className="flex items-center justify-between pb-1.5 border-b border-dark-700/50 relative">
-        {/* Bottom glow */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-500/20 to-transparent" />
         
         <div className="flex items-center gap-2">

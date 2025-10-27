@@ -35,7 +35,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </label>
         )}
         <div className="relative">
-          {/* Custom dropdown icon */}
           <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none z-10">
             <i className="fas fa-chevron-down text-[9px] text-dark-400" />
           </div>

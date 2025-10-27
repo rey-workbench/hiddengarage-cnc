@@ -16,26 +16,23 @@ export class CameraController {
     this.controls = new OrbitControls(camera, domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
-    this.controls.screenSpacePanning = false; // Keep panning on XZ plane (grid plane)
+    this.controls.screenSpacePanning = false;
     this.controls.minDistance = 1;
     this.controls.maxDistance = 5000;
   }
 
   adjustToFitBBox(bbox: BoundingBox): number {
-    // Remember: G-code coordinates are (X, Y, Z) but stored in Three.js as (X, Z, Y)
     const sizeX = bbox.maxX - bbox.minX;
     const sizeY = bbox.maxY - bbox.minY;
     const sizeZ = bbox.maxZ - bbox.minZ;
-    
-    // Calculate center in G-code space
+
     const centerX = (bbox.maxX + bbox.minX) / 2;
-    const centerY = (bbox.maxY + bbox.minY) / 2;  // G-code Y
-    const centerZ = (bbox.maxZ + bbox.minZ) / 2;  // G-code Z
+    const centerY = (bbox.maxY + bbox.minY) / 2;
+    const centerZ = (bbox.maxZ + bbox.minZ) / 2;
     
-    // Convert to Three.js space: (X, Z, Y) where Three Y is G-code Z
     const centerThreeX = centerX;
-    const centerThreeY = centerZ;  // Three.js Y = G-code Z
-    const centerThreeZ = centerY;  // Three.js Z = G-code Y
+    const centerThreeY = centerZ;
+    const centerThreeZ = centerY;
 
     const maxSize = Math.max(sizeX, sizeY, sizeZ);
     const fitHeightDistance = maxSize / (2 * Math.tan((this.camera.fov * Math.PI) / 360));

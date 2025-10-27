@@ -69,7 +69,6 @@ export function UIProvider({ children }: { children: ReactNode }) {
             playbackPanelState: parsed.playbackPanelState || prev.playbackPanelState,
           }));
         } catch (e) {
-          console.error('Failed to load panel states:', e);
         }
       } else {
         const defaults = getDefaultPanelStates();
@@ -177,7 +176,6 @@ export function UIProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
-  // Listen for loading events from LocaleContext
   useEffect(() => {
     const handleUILoading = ((e: CustomEvent) => {
       setLoading(e.detail.isLoading, e.detail.message);

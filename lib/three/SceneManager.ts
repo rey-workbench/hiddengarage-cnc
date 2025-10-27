@@ -20,11 +20,9 @@ export class SceneManager {
   constructor(container: HTMLElement) {
     this.container = container;
     
-    // Initialize scene
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0b1020);
 
-    // Initialize camera
     this.camera = new THREE.PerspectiveCamera(
       60,
       container.clientWidth / container.clientHeight,
@@ -34,19 +32,16 @@ export class SceneManager {
     this.camera.position.set(100, 100, 100);
     this.camera.lookAt(0, 0, 0);
 
-    // Initialize renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(this.renderer.domElement);
 
-    // Initialize helpers
     this.cameraController = new CameraController(this.camera, this.renderer.domElement);
     this.lightsHelper = new LightsHelper(this.scene);
     this.gridHelper = new CustomGridHelper(200, 20, CNCConstants.colors.grid);
     this.axesHelper = new CustomAxesHelper(10000);
     
-    // Add helpers to scene
     this.scene.add(this.gridHelper.getObject());
     this.scene.add(this.axesHelper.getObject());
 
@@ -68,10 +63,8 @@ export class SceneManager {
   }
 
   adjustCameraToFitBBox(bbox: BoundingBox): number {
-    // Adjust camera using camera controller
     const maxSize = this.cameraController.adjustToFitBBox(bbox);
     
-    // Update grid size and position based on bounding box
     const sizeX = bbox.maxX - bbox.minX;
     const sizeY = bbox.maxY - bbox.minY;
     const sizeZ = bbox.maxZ - bbox.minZ;
@@ -80,12 +73,10 @@ export class SceneManager {
     const centerY = (bbox.maxY + bbox.minY) / 2;
     const centerZ = (bbox.maxZ + bbox.minZ) / 2;
     
-    // Convert to Three.js space
     const centerThreeX = centerX;
     const centerThreeY = centerZ;
     const centerThreeZ = centerY;
     
-    // Update grid
     const gridSize = Math.ceil(maxSize / 10) * 10;
     const divisions = Math.max(10, Math.ceil(gridSize / 10));
     
@@ -132,13 +123,11 @@ export class SceneManager {
   dispose(): void {
     window.removeEventListener('resize', () => {});
     
-    // Dispose helpers
     this.cameraController.dispose();
     this.gridHelper.dispose();
     this.axesHelper.dispose();
     this.lightsHelper.dispose();
     
-    // Dispose renderer
     this.renderer.dispose();
     
     if (this.container.contains(this.renderer.domElement)) {

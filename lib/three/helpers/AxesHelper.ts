@@ -10,7 +10,6 @@ export class CustomAxesHelper {
     const arrowSize = 30;
     const labelDistance = arrowSize + 20;
     
-    // X Axis - Red
     this.createAxis(
       new THREE.Vector3(axisLength, 0, 0),
       0xff0000,
@@ -18,7 +17,6 @@ export class CustomAxesHelper {
       labelDistance
     );
     
-    // Y Axis - Green (Three.js Y = G-code Z, pointing up)
     this.createAxis(
       new THREE.Vector3(0, axisLength, 0),
       0x00ff00,
@@ -26,7 +24,6 @@ export class CustomAxesHelper {
       labelDistance
     );
     
-    // Z Axis - Blue (Three.js Z = G-code Y, pointing forward)
     this.createAxis(
       new THREE.Vector3(0, 0, axisLength),
       0x0000ff,
@@ -41,7 +38,6 @@ export class CustomAxesHelper {
     label: string,
     labelDistance: number
   ): void {
-    // Create line
     const lineGeometry = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(0, 0, 0),
       direction,
@@ -55,27 +51,22 @@ export class CustomAxesHelper {
     const line = new THREE.Line(lineGeometry, lineMaterial);
     this.group.add(line);
     
-    // Create arrow cone at the end
     const arrowGeometry = new THREE.ConeGeometry(8, 25, 8);
     const arrowMaterial = new THREE.MeshBasicMaterial({ color });
     const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
     
-    // Position and orient arrow
     const arrowPos = direction.clone().normalize().multiplyScalar(direction.length() - 12);
     arrow.position.copy(arrowPos);
     
-    // Orient arrow to point along axis
     if (direction.x > 0) {
       arrow.rotation.z = -Math.PI / 2;
     } else if (direction.y > 0) {
-      // Already pointing up
     } else if (direction.z > 0) {
       arrow.rotation.x = Math.PI / 2;
     }
     
     this.group.add(arrow);
     
-    // Create text label using sprite
     const sprite = this.createTextSprite(label, color);
     const labelPos = direction.clone().normalize().multiplyScalar(labelDistance);
     sprite.position.copy(labelPos);

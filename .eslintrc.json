@@ -1,3 +1,17 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-inline-comments": "error",
+    "multiline-comment-style": ["error", "starred-block"],
+    "capitalized-comments": ["error", "never"]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "excludedFiles": ["*.config.*", "next-env.d.ts"],
+      "rules": {
+        "no-inline-comments": "error"
+      }
+    }
+  ]
 }

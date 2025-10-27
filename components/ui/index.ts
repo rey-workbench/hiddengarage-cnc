@@ -1,4 +1,4 @@
-// UI Component Library - Export all components
+
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
 
@@ -19,8 +19,7 @@ export type { SectionProps } from './Section';
 
 export { Slider } from './Slider';
 export type { SliderProps } from './Slider';
-
-// Re-export existing UI components
+    
 export { default as DraggablePanel } from './DraggablePanel';
 export { default as LoadingOverlay } from './LoadingOverlay';
 export { default as StatusBar } from './StatusBar';
