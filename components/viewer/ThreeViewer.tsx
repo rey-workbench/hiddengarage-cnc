@@ -1,10 +1,10 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { useThreeScene } from '@/hooks/use-three-scene';
-import { useSimulation } from '@/contexts/simulation-context';
-import { useSettings } from '@/contexts/settings-context';
-import { usePlayback } from '@/hooks/use-playback';
+import { useThreeScene } from '@/hooks/useThreeScene';
+import { useSimulation } from '@/contexts/SimulationContext';
+import { useSettings } from '@/contexts/SettingsContext';
+import { usePlayback } from '@/hooks/usePlayback';
 
 interface ThreeViewerProps {
   onInitialized?: (managers: {

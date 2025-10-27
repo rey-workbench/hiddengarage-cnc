@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useRef, ChangeEvent } from 'react';
-import { useSettings } from '@/contexts/settings-context';
-import { useSimulation } from '@/contexts/simulation-context';
-import { useGCode } from '@/hooks/use-gcode';
-import { TRANSLATIONS } from '@/lib/constants';
+import { useSettings } from '@/contexts/SettingsContext';
+import { useSimulation } from '@/contexts/SimulationContext';
+import { useGCode } from '@/hooks/useGcode';
+import { TRANSLATIONS } from '@/lib/Constants';
 
 interface GCodeTabProps {
   pathRenderer: any;

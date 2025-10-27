@@ -9,8 +9,8 @@ import type {
   ToolPosition,
   SimulationState,
 } from '@/types';
-import { GCodeParser } from '@/lib/gcode-parser';
-import { SVGConverter } from '@/lib/svg-converter';
+import { GCodeParser } from '@/lib/GcodeParser';
+import { SVGConverter } from '@/lib/SvgConverter';
 
 interface SimulationContextType {
   segments: GCodeSegment[];

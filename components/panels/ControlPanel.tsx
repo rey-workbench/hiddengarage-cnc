@@ -1,12 +1,12 @@
 'use client';
 
-import { useUI } from '@/contexts/ui-context';
-import RibbonNavbar from '../ui/ribbon-navbar';
-import GCodeTab from '../tabs/gcode-tab';
-import ImageTab from '../tabs/image-tab';
-import SettingsTab from '../tabs/settings-tab';
-import StatisticsTab from '../tabs/statistics-tab';
-import LegendTab from '../tabs/legend-tab';
+import { useUI } from '@/contexts/UiContext';
+import RibbonNavbar from '../ui/RibbonNavbar';
+import GCodeTab from '../tabs/GCodeTab';
+import ImageTab from '../tabs/ImageTab';
+import SettingsTab from '../tabs/SettingsTab';
+import StatisticsTab from '../tabs/StatisticsTab';
+import LegendTab from '../tabs/LegendTab';
 
 interface ControlPanelProps {
   sceneManagers: {

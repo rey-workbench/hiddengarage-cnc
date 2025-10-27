@@ -1,5 +1,5 @@
 import type { SVGConversionOptions } from '@/types';
-import { CNCConstants } from './constants';
+import { CNCConstants } from './Constants';
 
 export class SVGConverter {
   private options: SVGConversionOptions;

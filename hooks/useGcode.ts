@@ -1,13 +1,13 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useSimulation } from '@/contexts/simulation-context';
-import { useUI } from '@/contexts/ui-context';
-import { useSettings } from '@/contexts/settings-context';
-import { TRANSLATIONS, CNCConstants } from '@/lib/constants';
-import type { PathRenderer } from '@/lib/three/path-renderer';
-import type { SceneManager } from '@/lib/three/scene-manager';
-import type { Toolhead } from '@/lib/three/toolhead';
+import { useSimulation } from '@/contexts/SimulationContext';
+import { useUI } from '@/contexts/UiContext';
+import { useSettings } from '@/contexts/SettingsContext';
+import { TRANSLATIONS, CNCConstants } from '@/lib/Constants';
+import type { PathRenderer } from '@/lib/three/PathRenderer';
+import type { SceneManager } from '@/lib/three/SceneManager';
+import type { Toolhead } from '@/lib/three/Toolhead';
 
 export function useGCode(
   pathRenderer: PathRenderer | null,

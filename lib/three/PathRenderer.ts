@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { GCodeSegment } from '@/types';
 import { SegmentType, ColorMode } from '@/types';
-import { CNCConstants } from '../constants';
+import { CNCConstants } from '../Constants';
 
 export class PathRenderer {
   private scene: THREE.Scene;

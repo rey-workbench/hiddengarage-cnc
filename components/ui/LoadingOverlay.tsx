@@ -1,6 +1,6 @@
 'use client';
 
-import { useUI } from '@/contexts/ui-context';
+import { useUI } from '@/contexts/UiContext';
 
 export default function LoadingOverlay() {
   const { uiState } = useUI();

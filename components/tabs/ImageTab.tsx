@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useRef, ChangeEvent } from 'react';
-import { useSettings } from '@/contexts/settings-context';
-import { useUI } from '@/contexts/ui-context';
-import { TRANSLATIONS } from '@/lib/constants';
+import { useSettings } from '@/contexts/SettingsContext';
+import { useUI } from '@/contexts/UiContext';
+import { TRANSLATIONS } from '@/lib/Constants';
 
 interface ImageTabProps {
   onGCodeGenerated: (gcode: string) => void;
@@ -466,8 +466,8 @@ export default function ImageTab({ onGCodeGenerated }: ImageTabProps) {
     try {
       showInfo(settings.language === 'id' ? 'Memproses gambar...' : 'Processing image...');
 
-      const { detectImageEdges, scaleContoursToStock } = await import('@/lib/image-processor');
-      const { generateGCodeFromImage } = await import('@/lib/image-to-gcode');
+      const { detectImageEdges, scaleContoursToStock } = await import('@/lib/ImageProcessor');
+      const { generateGCodeFromImage } = await import('@/lib/ImageToGcode');
 
       // Detect edges
       const contours = await detectImageEdges(selectedImage);

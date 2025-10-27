@@ -1,8 +1,8 @@
 'use client';
 
-import { useSimulation } from '@/contexts/simulation-context';
-import { useSettings } from '@/contexts/settings-context';
-import { TRANSLATIONS } from '@/lib/constants';
+import { useSimulation } from '@/contexts/SimulationContext';
+import { useSettings } from '@/contexts/SettingsContext';
+import { TRANSLATIONS } from '@/lib/Constants';
 
 export default function StatisticsTab() {
   const { stats } = useSimulation();

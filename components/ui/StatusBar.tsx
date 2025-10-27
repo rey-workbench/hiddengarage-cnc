@@ -1,6 +1,6 @@
 'use client';
 
-import { useUI } from '@/contexts/ui-context';
+import { useUI } from '@/contexts/UiContext';
 import { useState, useEffect } from 'react';
 
 export default function StatusBar() {

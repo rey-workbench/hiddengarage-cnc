@@ -1,9 +1,9 @@
 'use client';
 
-import { useSettings } from '@/contexts/settings-context';
-import { useUI } from '@/contexts/ui-context';
-import { useSceneControls } from '@/hooks/use-three-scene';
-import { TRANSLATIONS } from '@/lib/constants';
+import { useSettings } from '@/contexts/SettingsContext';
+import { useUI } from '@/contexts/UiContext';
+import { useSceneControls } from '@/hooks/useThreeScene';
+import { TRANSLATIONS } from '@/lib/Constants';
 import { ColorMode, CameraView } from '@/types';
 
 interface SettingsTabProps {

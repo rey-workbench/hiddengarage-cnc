@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import type { Settings } from '@/types';
 import { ColorMode } from '@/types';
-import { CNCConstants } from '@/lib/constants';
+import { CNCConstants } from '@/lib/Constants';
 
 interface SettingsContextType {
   settings: Settings;

@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useSimulation } from '@/contexts/simulation-context';
-import { useUI } from '@/contexts/ui-context';
+import { useSimulation } from '@/contexts/SimulationContext';
+import { useUI } from '@/contexts/UiContext';
 import type { SVGConversionOptions } from '@/types';
 
 export function useSVG() {

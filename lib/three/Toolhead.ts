@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CNCConstants } from '../constants';
+import { CNCConstants } from '../Constants';
 import type { ToolPosition } from '@/types';
 
 export class Toolhead {

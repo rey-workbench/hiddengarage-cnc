@@ -170,10 +170,12 @@
   .ribbon-tab {
     @apply flex items-center gap-2 px-4 py-2;
     @apply text-sm font-medium text-dark-300;
-    @apply transition-all duration-200;
+    @apply transition-all duration-150;
+    @apply no-underline;
     border-bottom: 2px solid transparent;
     @apply hover:text-gray-100;
     background: transparent;
+    will-change: transform, background-color;
   }
 
   .ribbon-tab:hover {
@@ -191,7 +193,9 @@
     top: 100%;
     z-index: 45;
     margin-top: 0;
-    animation: ribbonSlideDown 0.2s ease-out;
+    animation: ribbonSlideDown 0.15s ease-out;
+    will-change: transform;
+    contain: layout style paint;
   }
 
   .ribbon-content-dropdown-inner {
@@ -212,7 +216,7 @@
   @keyframes ribbonSlideDown {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-8px);
     }
     to {
       opacity: 1;

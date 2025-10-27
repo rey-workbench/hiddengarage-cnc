@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
-import type { PlaybackController } from '@/lib/three/playback-controller';
-import { useSimulation } from '@/contexts/simulation-context';
+import type { PlaybackController } from '@/lib/three/PlaybackController';
+import { useSimulation } from '@/contexts/SimulationContext';
 import type { GCodeSegment } from '@/types';
 
 export function usePlayback(

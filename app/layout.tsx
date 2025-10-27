@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { SimulationProvider } from '@/contexts/simulation-context';
-import { SettingsProvider } from '@/contexts/settings-context';
-import { UIProvider } from '@/contexts/ui-context';
+import { SimulationProvider } from '@/contexts/SimulationContext';
+import { SettingsProvider } from '@/contexts/SettingsContext';
+import { UIProvider } from '@/contexts/UiContext';
+import { WorkspaceProvider } from '@/contexts/WorkspaceContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CNC Simulator - G-Code & SVG Visualization',
-  description: 'Professional CNC G-Code parser and 3D visualization tool with SVG to G-Code conversion',
+  title: 'CNC Simulator - G-Code & Image to G-Code',
+  description: 'Professional CNC G-Code parser and 3D visualization tool with Image to G-Code conversion (Fusion 360 style)',
 };
 
 export default function RootLayout({
@@ -28,9 +29,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <SettingsProvider>
           <UIProvider>
-            <SimulationProvider>
-              {children}
-            </SimulationProvider>
+            <WorkspaceProvider>
+              <SimulationProvider>
+                {children}
+              </SimulationProvider>
+            </WorkspaceProvider>
           </UIProvider>
         </SettingsProvider>
       </body>

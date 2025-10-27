@@ -3,7 +3,7 @@
  * Generates G-code from image contours with different machining strategies
  */
 
-import type { ImageContour } from './image-processor';
+import type { ImageContour } from './ImageProcessor';
 
 export interface GCodeGeneratorConfig {
   strategy: 'contour' | 'pocket' | 'engrave';

@@ -1,4 +1,4 @@
-import { CNCConstants } from './constants';
+import { CNCConstants } from './Constants';
 import type { 
   GCodeSegment, 
   BoundingBox, 

@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { SceneManager } from '@/lib/three/scene-manager';
-import { Toolhead } from '@/lib/three/toolhead';
-import { PathRenderer } from '@/lib/three/path-renderer';
-import { PlaybackController } from '@/lib/three/playback-controller';
+import { SceneManager } from '@/lib/three/SceneManager';
+import { Toolhead } from '@/lib/three/Toolhead';
+import { PathRenderer } from '@/lib/three/PathRenderer';
+import { PlaybackController } from '@/lib/three/PlaybackController';
 import type { CameraView } from '@/types';
 
 export function useThreeScene(containerRef: React.RefObject<HTMLDivElement>) {

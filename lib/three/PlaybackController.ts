@@ -1,6 +1,6 @@
 import type { GCodeSegment, ToolPosition, SimulationState } from '@/types';
-import { Toolhead } from './toolhead';
-import { PathRenderer } from './path-renderer';
+import { Toolhead } from './Toolhead';
+import { PathRenderer } from './PathRenderer';
 
 export class PlaybackController {
   private segments: GCodeSegment[] = [];

@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import type { BoundingBox } from '@/types';
 import { CameraView } from '@/types';
-import { CNCConstants } from '../constants';
-import { CustomAxesHelper } from './helpers/axes-helper';
-import { CustomGridHelper } from './helpers/grid-helper';
-import { CameraController } from './helpers/camera-controller';
-import { LightsHelper } from './helpers/lights-helper';
+import { CNCConstants } from '../Constants';
+import { CustomAxesHelper } from './helpers/AxesHelper';
+import { CustomGridHelper } from './helpers/GridHelper';
+import { CameraController } from './helpers/CameraController';
+import { LightsHelper } from './helpers/LightsHelper';
 
 export class SceneManager {
   private scene: THREE.Scene;

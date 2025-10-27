@@ -1,10 +1,10 @@
 'use client';
 
-import { useSimulation } from '@/contexts/simulation-context';
-import { useUI } from '@/contexts/ui-context';
-import { useSettings } from '@/contexts/settings-context';
-import { TRANSLATIONS } from '@/lib/constants';
-import DraggablePanel from '../ui/draggable-panel';
+import { useSimulation } from '@/contexts/SimulationContext';
+import { useUI } from '@/contexts/UiContext';
+import { useSettings } from '@/contexts/SettingsContext';
+import { TRANSLATIONS } from '@/lib/Constants';
+import DraggablePanel from '../ui/DraggablePanel';
 
 interface PlaybackPanelProps {
   playbackController: any;

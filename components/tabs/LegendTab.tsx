@@ -1,7 +1,7 @@
 'use client';
 
-import { useSettings } from '@/contexts/settings-context';
-import { TRANSLATIONS } from '@/lib/constants';
+import { useSettings } from '@/contexts/SettingsContext';
+import { TRANSLATIONS } from '@/lib/Constants';
 
 export default function LegendTab() {
   const { settings } = useSettings();
